@@ -4,10 +4,10 @@ import { Sprout, Recycle, Award, Cloud, TrendingUp, Users, Droplets, Sun, Zap, S
 import { useLanguage } from '../contexts/LanguageContext';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Badge } from './ui/badge';
 
 export const Enhanced3DHomePage = ({ onNavigate }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const features = [
     {
@@ -86,8 +86,8 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
 
   const testimonials = [
     {
-      name: 'Ali Akber',
-      location: 'NawabShah',
+      name: t('Ali Akber', 'علی اکبر', 'علي اڪبر'),
+      location: t('NawabShah', 'نواب شاہ', 'نواب شاهه'),
       text: t(
         'AgriResilient helped me increase my wheat yield by 30%!',
         'AgriResilient نے میری گندم کی پیداوار میں 30٪ اضافہ کیا!',
@@ -97,19 +97,19 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
       rating: 5,
     },
     {
-      name: 'Muhammad Ali',
-      location: 'Lahore',
+      name: t('Muhammad Ali', 'محمد علی', 'محمد علي'),
+      location: t('Faisalabad', 'فیصل آباد', 'فيصل آباد'),
       text: t(
-        'The waste recycling feature saved my damaged rice crop!',
-        'فضلہ ری سائیکل نے میری تباہ شدہ چاول کی فصل کو بچایا!',
-        'فضول ري سائيڪل منهنجي تباھ ٿيل چانورن جي فصل کي بچايو!'
+        'The AI advisory is spot on. Saved my cotton crop from pests.',
+        'AI مشورہ بالکل درست ہے۔ میری کپاس کی فصل کو کیڑوں سے بچایا۔',
+        'AI صلاح بلڪل درست آهي. منهنجي ڪپاس جي فصل کي حشرن کان بچايو.'
       ),
-      image: 'https://images.unsplash.com/photo-1654526645468-9ae1cde48fe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXJtZXIlMjBwb3J0cmFpdHxlbnwxfHx8fDE3NjIxMzA0OTV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop',
       rating: 5,
     },
     {
-      name: 'Ghulam Hasain',
-      location: 'Sakrand',
+      name: t('Ghulam Hasain', 'غلام حسین', 'غلام حسين'),
+      location: t('Sakrand', 'سکرنڈ', 'سڪرنڊ'),
       text: t(
         'A revolutionary platform for Pakistani agriculture.',
         'پاکستانی زراعت کے لیے ایک انقلابی پلیٹ فارم۔',
@@ -121,9 +121,9 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="relative overflow-hidden bg-white">
+    <div className="min-h-screen bg-[#FDFDFD] overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+      <section className="relative h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden">
         {/* Animated Background Icons */}
         <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
           {[...Array(20)].map((_, i) => (
@@ -160,35 +160,36 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm mb-6"
+                className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm mb-4 border border-green-200"
               >
-                🌍 {t('Climate-Smart Agriculture for Pakistan', 'پاکستان کے لیے موسمیاتی سمارٹ زراعت', 'پاڪستان لاءِ موسمياتي سمارٽ زراعت')}
+                <Zap className="w-4 h-4 mr-2 inline" />
+                {t('Climate-Smart Agriculture for Pakistan', 'پاکستان کے لیے کلائمیٹ سمارٹ زراعت', 'پاڪستان لاءِ ڪلائميٽ سمارٽ زراعت')}
               </motion.div>
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight mb-8">
-                {t('Resilient Farming', 'مضبوط کھیتی باڑی', 'مضبوط زراعت')}{' '}
-                <span className="text-green-600">{t('Powered by AI', 'AI سے لیس', 'AI سان ليس')}</span>
+              <h1 className={`${language === 'sd' ? 'text-5xl lg:text-6xl' : 'text-5xl lg:text-6xl'} font-black text-gray-900 leading-tight mb-6`}>
+                {t('Resilient Farming', 'مستحکم زراعت', 'مستحڪم زراعت')} <br />
+                <span className="text-green-600 italic">{t('Powered by AI', 'AI کے ذریعے', 'AI جي ذريعي')}</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-xl">
                 {t(
                   'Join thousands of farmers using AI to adapt to climate change, increase yields, and earn carbon rewards.',
-                  'موسمیاتی تبدیلیوں کے مطابق ڈھالنے، پیداوار بڑھانے اور کاربن انعامات حاصل کرنے کے لیے AI استعمال کرنے والے ہزاروں کسانوں میں شامل ہوں۔',
-                  'موسمياتي تبديلين موجب پاڻ کي ڍالڻ، پيداوار وڌائڻ ۽ ڪاربن انعام حاصل ڪرڻ لاءِ AI استعمال ڪندڙ هزارين هارين ۾ شامل ٿيو.'
+                  'ان ہزاروں کسانوں میں شامل ہوں جو موسمیاتی تبدیلیوں کے مطابق ڈھلنے، پیداوار بڑھانے اور کاربن انعامات حاصل کرنے کے لیے AI کا استعمال کر رہے ہیں۔',
+                  'انهن هزارين هارين ۾ شامل ٿيو جيڪي موسمي تبديلين موجب ڍلڻ، پيداوار وڌائڻ ۽ ڪاربن انعام حاصل ڪرڻ لاءِ AI جو استعمال ڪري رهيا آهن.'
                 )}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button
-                  onClick={() => onNavigate('dashboard')}
-                  className="px-8 py-6 bg-green-600 hover:bg-green-700 text-white rounded-2xl text-lg shadow-xl shadow-green-200 transition-all flex items-center gap-2"
+                  onClick={() => onNavigate('crop-advisory')}
+                  className="px-10 py-8 bg-green-600 hover:bg-green-700 text-white rounded-2xl text-xl font-bold shadow-2xl shadow-green-200 transition-all flex items-center gap-2 group"
                 >
                   {t('Get Started', 'شروع کریں', 'شروع ڪريو')}
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform w-6 h-6" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="px-8 py-6 border-2 border-green-600 text-green-600 rounded-2xl text-lg hover:bg-green-50 flex items-center gap-2"
+                  className="px-10 py-8 border-2 border-green-600 text-green-600 rounded-2xl text-xl font-bold hover:bg-green-50 flex items-center gap-2"
                 >
-                  <Play className="w-5 h-5" />
-                  {t('Watch Video', 'ویڈیو دیکھیں', 'وڊيو ڏسو')}
+                  <Play className="mr-2 fill-current w-6 h-6" />
+                  {t('Watch Video', 'ویڈیو دیکھیں', 'ويڊيو ڏسو')}
                 </Button>
               </div>
             </motion.div>
@@ -201,7 +202,7 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
               style={{ perspective: '1000px' }}
             >
               <div className="relative w-full aspect-square rounded-[3rem] bg-gradient-to-br from-green-400 to-blue-500 overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <ImageWithFallback
+                <img
                   src="https://images.unsplash.com/photo-1581092335878-2d9ff86ca2bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyZSUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzYyMTExMDEzMHww&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Modern Farming"
                   className="w-full h-full object-cover mix-blend-overlay opacity-80"
@@ -261,13 +262,12 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
                   y: -15,
                   rotateY: 10,
                   z: 50,
-                  boxShadow: '0 30px 60px rgba(0,0,0,0.1)',
                 }}
                 className="group h-full"
-                style={{ transformStyle: 'preserve-3d' }}
+                style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
                 onClick={() => onNavigate(feature.id)}
               >
-                <Card className="p-8 bg-white border-2 border-transparent group-hover:border-green-400 transition-all h-full rounded-[2.5rem] shadow-xl flex flex-col items-center text-center cursor-pointer">
+                <Card className="p-8 bg-white border-2 border-transparent group-hover:border-green-400 transition-all h-full rounded-[2.5rem] shadow-xl hover:shadow-2xl flex flex-col items-center text-center cursor-pointer overflow-hidden transform-gpu">
                   <motion.div
                     className={`w-20 h-20 bg-gradient-to-br ${feature.color} rounded-3xl mb-8 flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform`}
                   >
@@ -306,14 +306,13 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
                 whileHover={{
                   scale: 1.05,
                   rotateY: 5,
-                  boxShadow: '0 25px 50px rgba(0,0,0,0.2)',
                 }}
-                style={{ transformStyle: 'preserve-3d' }}
+                style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
               >
-                <Card className="p-8 bg-gray-50 rounded-[2.5rem] shadow-lg h-full relative overflow-hidden group">
+                <Card className="p-8 bg-gray-50 rounded-[2.5rem] shadow-lg hover:shadow-2xl h-full relative overflow-hidden group transition-all duration-300 transform-gpu">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg border-2 border-white">
-                      <ImageWithFallback src={test.image} alt={test.name} className="w-full h-full object-cover" />
+                      <img src={test.image} alt={test.name} className="w-full h-full object-cover" />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">{test.name}</h4>

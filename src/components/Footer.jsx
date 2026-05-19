@@ -77,13 +77,18 @@ export const Footer = () => {
           >
             <h3 className="text-green-300 text-xl">{t('Quick Links', 'فوری لنکس', 'تيز لنڪس')}</h3>
             <ul className="space-y-2">
-              {['Home', 'Dashboard', 'Resources', 'About Us'].map((link, index) => (
+              {[
+                { id: 'home', label: t('Home', 'ہوم', 'گھر') },
+                { id: 'dashboard', label: t('Dashboard', 'ڈیش بورڈ', 'ڊيش بورڊ') },
+                { id: 'blog', label: t('Resources', 'وسائل', 'وسيلا') },
+                { id: 'about', label: t('About Us', 'ہمارے بارے میں', 'اسان بابت') }
+              ].map((link) => (
                 <motion.li
-                  key={link}
+                  key={link.id}
                   whileHover={{ x: 10, color: '#86efac' }}
                   className="cursor-pointer text-green-200/80"
                 >
-                  {link}
+                  {link.label}
                 </motion.li>
               ))}
             </ul>

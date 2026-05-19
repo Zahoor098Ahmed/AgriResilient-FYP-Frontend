@@ -15,20 +15,20 @@ export const CarbonRewards = ({ onNavigate }) => {
 
   const handleClaimReward = async (rewardTitle, cost) => {
     if (!user) {
-      toast.error(t('Please login to claim rewards', 'انعامات حاصل کرنے کے لیے لاگ ان کریں'));
+      toast.error(t('Please login to claim rewards', 'انعامات حاصل کرنے کے لیے لاگ ان کریں', 'انعام حاصل ڪرڻ لاءِ لاگ ان ڪريو'));
       onNavigate('login');
       return;
     }
 
     if ((user.credits || 0) < cost) {
-      toast.error(t('Insufficient credits!', 'ناکافی کریڈٹس!'));
+      toast.error(t('Insufficient credits!', 'ناکافی کریڈٹس!', 'ناکافي ڪريڊٽس!'));
       return;
     }
 
     try {
       const result = await redeemReward(rewardTitle, cost);
       if (result.success) {
-        toast.success(t(`${rewardTitle} redeemed successfully!`, `${rewardTitle} کامیابی سے حاصل کر لیا گیا!`));
+        toast.success(t(`${rewardTitle} redeemed successfully!`, `${rewardTitle} کامیابی سے حاصل کر لیا گیا!`, `${rewardTitle} ڪاميابي سان حاصل ڪيو ويو!`));
       } else {
         toast.error(result.message);
       }
@@ -44,17 +44,17 @@ export const CarbonRewards = ({ onNavigate }) => {
   };
 
   const achievements = [
-    { title: t('Early Adopter', 'ابتدائی اپنانے والا'), icon: '🌱', unlocked: true },
-    { title: t('Water Saver', 'پانی بچانے والا'), icon: '💧', unlocked: true },
-    { title: t('Carbon Champion', 'کاربن چیمپیئن'), icon: '🏆', unlocked: false },
-    { title: t('Community Leader', 'کمیونٹی لیڈر'), icon: '👥', unlocked: false },
+    { title: t('Early Adopter', 'ابتدائی اپنانے والا', 'شروعاتي اپنائيندڙ'), icon: '🌱', unlocked: true },
+    { title: t('Water Saver', 'پانی بچانے والا', 'پاڻي بچائيندڙ'), icon: '💧', unlocked: true },
+    { title: t('Carbon Champion', 'کاربن چیمپیئن', 'ڪاربن چيمپيئن'), icon: '🏆', unlocked: false },
+    { title: t('Community Leader', 'کمیونٹی لیڈر', 'ڪميونٽي ليڊر'), icon: '👥', unlocked: false },
   ];
 
   const rewardOptions = [
-    { title: t('Premium Seeds', 'پریمیم بیج'), cost: 100, icon: '🌾', color: 'from-green-500 to-green-700' },
-    { title: t('Fertilizer Discount', 'کھاد کی رعایت'), cost: 150, icon: '🧪', color: 'from-blue-500 to-blue-700' },
-    { title: t('Solar Panels', 'سولر پینلز'), cost: 500, icon: '☀️', color: 'from-amber-500 to-amber-700' },
-    { title: t('Irrigation System', 'آبپاشی نظام'), cost: 300, icon: '💧', color: 'from-cyan-500 to-cyan-700' },
+    { title: t('Premium Seeds', 'پریمیم بیج', 'پريميئم ٻج'), cost: 100, icon: '🌾', color: 'from-green-500 to-green-700' },
+    { title: t('Fertilizer Discount', 'کھاد کی رعایت', 'ڀاڻ جي رعايت'), cost: 150, icon: '🧪', color: 'from-blue-500 to-blue-700' },
+    { title: t('Solar Panels', 'سولر پینلز', 'سولر پينلز'), cost: 500, icon: '☀️', color: 'from-amber-500 to-amber-700' },
+    { title: t('Irrigation System', 'آبپاشی نظام', 'آبپاشي نظام'), cost: 300, icon: '💧', color: 'from-cyan-500 to-cyan-700' },
   ];
 
   const progressPercentage = Math.min((userStats.credits / userStats.nextMilestone) * 100, 100);
@@ -67,7 +67,7 @@ export const CarbonRewards = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-8 text-center text-4xl font-black"
         >
-          {t('Carbon Rewards & Network', 'کاربن انعامات اور نیٹ ورک')}
+          {t('Carbon Rewards & Network', 'کاربن انعامات اور نیٹ ورک', 'ڪاربن انعام ۽ نيٽ ورڪ')}
         </motion.h1>
 
         {/* User Stats Card */}
@@ -76,14 +76,14 @@ export const CarbonRewards = ({ onNavigate }) => {
           animate={{ scale: 1, opacity: 1 }}
           className="mb-8"
         >
-          <Card className="p-8 bg-gradient-to-br from-green-600 to-green-800 text-white shadow-2xl border-none">
+          <Card className="p-8 bg-gradient-to-br from-green-600 to-green-800 text-white shadow-2xl border-none overflow-hidden">
             <div className="grid md:grid-cols-3 gap-8 items-center">
               <div className="text-center">
                 <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Award className="w-10 h-10" />
                 </div>
                 <div className="text-4xl font-black">{userStats.credits}</div>
-                <p className="text-green-100 text-sm">{t('Available Credits', 'دستیاب کریڈٹس')}</p>
+                <p className="text-green-100 text-sm">{t('Available Credits', 'دستیاب کریڈٹس', 'دستياب ڪريڊٽس')}</p>
               </div>
               
               <div className="text-center border-x border-white/10 px-4">
@@ -91,17 +91,17 @@ export const CarbonRewards = ({ onNavigate }) => {
                   <Trophy className="w-10 h-10 text-yellow-300" />
                 </div>
                 <div className="text-4xl font-black">#{userStats.rank}</div>
-                <p className="text-green-100 text-sm">{t('Global Rank', 'عالمی درجہ بندی')}</p>
+                <p className="text-green-100 text-sm">{t('Global Rank', 'عالمی درجہ بندی', 'عالمي درجه بندي')}</p>
               </div>
 
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span>{t('Next Level', 'اگلا لیول')}</span>
+                  <span>{t('Next Level', 'اگلا لیول', 'اگيون ليول')}</span>
                   <span className="font-bold">{userStats.credits} / {userStats.nextMilestone}</span>
                 </div>
                 <Progress value={progressPercentage} className="h-3 bg-white/20" />
                 <p className="text-xs text-green-200">
-                  {Math.max(userStats.nextMilestone - userStats.credits, 0)} {t('more to reach next level', 'مزید پوائنٹس اگلے لیول کے لیے')}
+                  {Math.max(userStats.nextMilestone - userStats.credits, 0)} {t('more to reach next level', 'مزید پوائنٹس اگلے لیول کے لیے', 'وڌيڪ پوائنٽس ايندڙ ليول لاءِ')}
                 </p>
               </div>
             </div>
@@ -112,14 +112,14 @@ export const CarbonRewards = ({ onNavigate }) => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Achievements */}
-            <Card className="p-6 bg-white shadow-xl border-2 border-green-50">
+            <Card className="p-6 bg-white shadow-xl border-2 border-green-50 overflow-hidden">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
-                {t('Your Badges', 'آپ کے بیجز')}
+                {t('Your Badges', 'آپ کے بیجز', 'توهان جا بيج')}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {achievements.map((item, i) => (
-                  <div key={i} className={`p-4 rounded-2xl text-center border-2 transition-all ${item.unlocked ? 'bg-green-50 border-green-200 shadow-sm' : 'bg-gray-50 border-gray-100 opacity-40'}`}>
+                  <div key={i} className={`p-4 rounded-2xl text-center border-2 transition-all overflow-hidden ${item.unlocked ? 'bg-green-50 border-green-200 shadow-sm' : 'bg-gray-50 border-gray-100 opacity-40'}`}>
                     <div className="text-4xl mb-2">{item.icon}</div>
                     <div className="text-xs font-black text-gray-700 uppercase">{item.title}</div>
                   </div>
@@ -128,15 +128,15 @@ export const CarbonRewards = ({ onNavigate }) => {
             </Card>
 
             {/* Redemption Grid */}
-            <Card className="p-6 bg-white shadow-xl border-2 border-green-50">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('Available Rewards', 'دستیاب انعامات')}</h2>
+            <Card className="p-6 bg-white shadow-xl border-2 border-green-50 overflow-hidden">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('Available Rewards', 'دستیاب انعامات', 'دستياب انعام')}</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {rewardOptions.map((opt, i) => (
                   <motion.div
                     key={i}
                     whileHover={{ y: -5 }}
                     onClick={() => handleClaimReward(opt.title, opt.cost)}
-                    className="p-5 rounded-2xl bg-gray-50 border-2 border-transparent hover:border-green-500 hover:bg-white transition-all cursor-pointer group shadow-sm"
+                    className="p-5 rounded-2xl bg-gray-50 border-2 border-transparent hover:border-green-500 hover:bg-white transition-all cursor-pointer group shadow-sm overflow-hidden"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${opt.color} text-white flex items-center justify-center text-2xl shadow-lg`}>
@@ -144,10 +144,10 @@ export const CarbonRewards = ({ onNavigate }) => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-bold text-gray-800 group-hover:text-green-700 transition-colors">{opt.title}</h4>
-                        <p className="text-sm text-gray-500 font-medium">{opt.cost} {t('Points', 'پوائنٹس')}</p>
+                        <p className="text-sm text-gray-500 font-medium">{opt.cost} {t('Points', 'پوائنٹس', 'پوائنٽس')}</p>
                       </div>
                       <Badge className="bg-green-100 text-green-700 border-green-200 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                        {t('Get', 'حاصل کریں')}
+                        {t('Get', 'حاصل کریں', 'حاصل ڪريو')}
                       </Badge>
                     </div>
                   </motion.div>
@@ -161,7 +161,7 @@ export const CarbonRewards = ({ onNavigate }) => {
             <Card className="p-6 bg-white shadow-xl border-2 border-green-50 h-fit">
               <div className="flex items-center gap-3 mb-6">
                 <Users className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-bold text-gray-800">{t('Farmer Network', 'کسان نیٹ ورک')}</h2>
+                <h2 className="text-xl font-bold text-gray-800">{t('Farmer Network', 'کسان نیٹ ورک', 'هارين جو نيٽ ورڪ')}</h2>
               </div>
               <div className="space-y-4 mb-6">
                 {[1, 2, 3, 4].map((n) => (
@@ -171,27 +171,27 @@ export const CarbonRewards = ({ onNavigate }) => {
                         {n}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-gray-800">User_{n}00</div>
-                        <div className="text-[10px] text-gray-500">Verified Farmer</div>
+                        <div className="text-sm font-bold text-gray-800">{t(`Farmer`, `کسان`, `هاري`)} {n}</div>
+                        <div className="text-[10px] text-gray-500">{t('Verified Farmer', 'تصدیق شدہ کسان', 'تصديق ٿيل هاري')}</div>
                       </div>
                     </div>
-                    <div className="text-green-600 font-black text-sm">{(5-n)*200} pts</div>
+                    <div className="text-green-600 font-black text-sm">{(5-n)*200} {t('pts', 'پوائنٹس', 'پوائنٽس')}</div>
                   </div>
                 ))}
               </div>
               <Button 
                 onClick={() => {
                   if (!user) {
-                    toast.error(t('Please login to join the chat', 'چیٹ میں شامل ہونے کے لیے لاگ ان کریں'));
+                    toast.error(t('Please login to join the chat', 'چیٹ میں شامل ہونے کے لیے لاگ ان کریں', 'چيٽ ۾ شامل ٿيڻ لاءِ لاگ ان ڪريو'));
                     onNavigate('login');
                     return;
                   }
-                  toast.info('Chat coming soon!');
+                  toast.info(t('Chat coming soon!', 'چیٹ جلد آ رہی ہے!', 'چيٽ جلد اچي رهي آهي!'));
                 }}
                 className="w-full bg-green-600 hover:bg-green-700 py-6 rounded-xl font-bold"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
-                {t('Community Chat', 'کمیونٹی چیٹ')}
+                {t('Community Chat', 'کمیونٹی چیٹ', 'ڪميونٽي چيٽ')}
               </Button>
             </Card>
           </div>

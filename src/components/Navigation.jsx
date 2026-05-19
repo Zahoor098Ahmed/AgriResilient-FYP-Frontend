@@ -23,9 +23,9 @@ export const Navigation = ({ currentPage, onNavigate }) => {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=30.3753&longitude=69.3451&current=temperature_2m,weather_code');
         const data = await res.json();
         if (data.current.temperature_2m > 35) {
-          setWeatherAlert(`${t('Heat Warning', 'گرمی کا الرٹ')}: ${data.current.temperature_2m}°C`);
+          setWeatherAlert(`${t('Heat Warning', 'گرمی کا الرٹ', 'گرمي جو الرٽ')}: ${data.current.temperature_2m}°C`);
         } else if (data.current.weather_code >= 51) {
-          setWeatherAlert(t('Rain Forecasted Today', 'آج بارش متوقع ہے'));
+          setWeatherAlert(t('Rain Forecasted Today', 'آج بارش متوقع ہے', 'اڄ مينهن جي اڳڪٿي آهي'));
         }
       } catch (err) {
         console.error('Quick weather fetch error:', err);
@@ -45,7 +45,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
     { id: 'weather', label: t('Weather', 'موسم', 'موسم'), icon: Cloud },
     { id: 'blog', label: t('Resources', 'وسائل', 'وسيلا'), icon: BookOpen },
     { id: 'about', label: t('About', 'ہمارے بارے میں', 'اسان بابت'), icon: Info },
-    { id: 'contact', label: t('Contact', 'رابطہ', 'رابطو'), icon: Phone },
+    { id: 'contact', label: t('Contact', 'رابطہ کریں', 'رابطو'), icon: Phone },
   ];
 
   if (user?.role === 'admin') {
@@ -158,7 +158,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                   className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-xl font-bold shadow-lg hover:bg-green-700 transition-all"
                 >
                   <LogIn className="w-4 h-4" />
-                  {t('Login', 'لاگ ان')}
+                  {t('Login', 'لاگ ان', 'لاگ ان')}
                 </motion.button>
               )}
 
@@ -293,7 +293,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-bold shadow-md"
                   >
                     <LogIn className="w-4 h-4" />
-                    {t('Login', 'لاگ ان')}
+                    {t('Login', 'لاگ ان', 'لاگ ان')}
                   </button>
                 )}
               </div>

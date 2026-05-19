@@ -104,7 +104,7 @@ export const AdminPanel = () => {
         {activeTab === 'overview' && stats && (
           <div className="space-y-8">
             <div className="grid md:grid-cols-3 gap-6">
-              <Card className="p-6 bg-white shadow-xl border-t-4 border-green-600">
+              <Card className="p-6 bg-white shadow-xl border-t-4 border-green-600 overflow-hidden">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <Scan className="w-8 h-8 text-green-600" />
@@ -115,7 +115,7 @@ export const AdminPanel = () => {
                   </div>
                 </div>
               </Card>
-              <Card className="p-6 bg-white shadow-xl border-t-4 border-blue-600">
+              <Card className="p-6 bg-white shadow-xl border-t-4 border-blue-600 overflow-hidden">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-blue-100 rounded-xl">
                     <Users className="w-8 h-8 text-blue-600" />
@@ -126,7 +126,7 @@ export const AdminPanel = () => {
                   </div>
                 </div>
               </Card>
-              <Card className="p-6 bg-white shadow-xl border-t-4 border-purple-600">
+              <Card className="p-6 bg-white shadow-xl border-t-4 border-purple-600 overflow-hidden">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <BarChart3 className="w-8 h-8 text-purple-600" />
@@ -139,7 +139,7 @@ export const AdminPanel = () => {
               </Card>
             </div>
 
-            <Card className="p-8 bg-white shadow-xl">
+            <Card className="p-8 bg-white shadow-xl overflow-hidden">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Popular Objects</h2>
               <div className="space-y-4">
                 {stats.commonObjects.map((obj, i) => (

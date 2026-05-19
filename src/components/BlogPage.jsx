@@ -10,24 +10,24 @@ export const BlogPage = ({ onNavigate }) => {
 
   const articles = [
     {
-      title: t('Climate-Smart Farming in Pakistan', 'پاکستان میں موسمیاتی سمارٹ کھیتی'),
-      excerpt: t('Learn how to adapt your farming practices to climate change', 'موسمیاتی تبدیلی کے لیے اپنی کھیتی کو کیسے ڈھالیں'),
+      title: t('Climate-Smart Farming in Pakistan', 'پاکستان میں موسمیاتی سمارٹ کھیتی', 'پاڪستان ۾ موسمياتي سمارٽ فارمنگ'),
+      excerpt: t('Learn how to adapt your farming practices to climate change', 'موسمیاتی تبدیلی کے لیے اپنی کھیتی کو کیسے ڈھالیں', 'سکو ته ڪيئن پنهنجي فارمنگ جي طريقن کي موسمياتي تبديلي سان مطابقت ڏجي'),
       author: 'Dr. Ali Hassan',
       date: 'Nov 1, 2025',
       readTime: '5 min',
       image: 'https://images.unsplash.com/photo-1581092335878-2d9ff86ca2bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyZSUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzYyMTExMDEzMHww&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
-      title: t('Maximizing Wheat Yield in 2025', '2025 میں گندم کی پیداوار کو زیادہ سے زیادہ کرنا'),
-      excerpt: t('Best practices for wheat cultivation this season', 'اس موسم میں گندم کی کاشت کے بہترین طریقے'),
+      title: t('Maximizing Wheat Yield in 2025', '2025 میں گندم کی پیداوار کو زیادہ سے زیادہ کرنا', '2025 ۾ ڪڻڪ جي پيداوار کي وڌ کان وڌ ڪرڻ'),
+      excerpt: t('Best practices for wheat cultivation this season', 'اس موسم میں گندم کی کاشت کے بہترین طریقے', 'هن موسم ۾ ڪڻڪ جي پوک جا بهترين طريقا'),
       author: 'Fatima Khan',
       date: 'Oct 28, 2025',
       readTime: '7 min',
       image: 'https://images.unsplash.com/photo-1664729570424-069f0c0d5ef4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGVhdCUyMGZpZWxkJTIwY3JvcHN8ZW58MXx8fHwxNzYyMTQ5MDYxfDA&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
-      title: t('Turning Waste into Profit', 'فضلہ کو منافع میں تبدیل کرنا'),
-      excerpt: t('How recycling damaged crops can earn you money', 'تباہ شدہ فصلوں کی ری سائیکلنگ سے پیسے کیسے کمائیں'),
+      title: t('Turning Waste into Profit', 'فضلہ کو منافع میں تبدیل کرنا', 'فضول کي فائدي ۾ تبديل ڪرڻ'),
+      excerpt: t('How recycling damaged crops can earn you money', 'تباہ شدہ فصلوں کی ری سائیکلنگ سے پیسے کیسے کمائیں', 'تباھ ٿيل فصلن جي ري سائيڪلنگ مان پئسا ڪيئن ڪمائجن'),
       author: 'Ahmed Raza',
       date: 'Oct 25, 2025',
       readTime: '4 min',
@@ -43,24 +43,23 @@ export const BlogPage = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-12 text-center"
         >
-          {t('Resources & Blog', 'وسائل اور بلاگ')}
+          {t('Resources & Blog', 'وسائل اور بلاگ', 'وسيلا ۽ بلاگ')}
         </motion.h1>
 
         <div className="grid md:grid-cols-3 gap-8">
           {articles.map((article, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50, rotateY: -90 }}
-              animate={{ opacity: 1, y: 0, rotateY: 0 }}
-              transition={{ delay: index * 0.2 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
               whileHover={{
                 scale: 1.05,
                 rotateY: 5,
-                boxShadow: '0 25px 50px rgba(0,0,0,0.2)',
               }}
-              style={{ transformStyle: 'preserve-3d' }}
+              style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
             >
-              <Card className="bg-white shadow-xl overflow-hidden h-full cursor-pointer">
+              <Card className="bg-white shadow-xl hover:shadow-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 transform-gpu">
                 <div className="h-48 overflow-hidden">
                   <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                     <ImageWithFallback
@@ -88,7 +87,7 @@ export const BlogPage = ({ onNavigate }) => {
                     whileHover={{ x: 10 }}
                   >
                     <BookOpen className="w-5 h-5" />
-                    <span>{t('Read More', 'مزید پڑھیں')}</span>
+                    <span>{t('Read More', 'مزید پڑھیں', 'وڌيڪ پڙهو')}</span>
                   </motion.div>
                 </div>
               </Card>

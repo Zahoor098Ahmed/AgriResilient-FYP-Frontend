@@ -1,69 +1,114 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Droplets, Sun, Bug, Calendar, TrendingUp } from 'lucide-react';
+import { Droplets, Sun, Bug, Calendar, TrendingUp, Leaf, Factory, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
+import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 
 export const CropAdvisory = ({ onNavigate }) => {
-  const { t } = useLanguage();
-  const { user } = useAuth();
+  const { t, language } = useLanguage();
+  const { token, user } = useAuth();
   const [selectedCrop, setSelectedCrop] = useState('');
-  const [showRecommendations, setShowRecommendations] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
+  const [selectedCropData, setSelectedCropData] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const handleGetAdvisory = () => {
+  // Re-fetch advisory if language changes and we already have recommendations
+  React.useEffect(() => {
+    if (selectedCrop && recommendations.length > 0) {
+      handleGetAdvisory();
+    }
+  }, [language]);
+
+  const handleGetAdvisory = async () => {
     if (!user) {
-      toast.error(t('Please login to get AI recommendations', 'AI مشورے حاصل کرنے کے لیے لاگ ان کریں'));
+      toast.error(t('Please login to get AI recommendations', 'AI مشورے حاصل کرنے کے لیے لاگ ان کریں', 'AI مشورا حاصل ڪرڻ لاءِ لاگ ان ڪريو'));
       onNavigate('login');
       return;
     }
-    setShowRecommendations(true);
+
+    if (!selectedCrop) {
+      toast.error(t('Please select a crop first', 'پہلے فصل منتخب کریں', 'پهرين فصل چونڊيو'));
+      return;
+    }
+
+    setLoading(true);
+    setRetryCount(0);
+    setRecommendations([]);
+    
+    // Simple fetch with timeout or better UX
+    const fetchWithRetry = async (attempt = 0) => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/advisory`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+          cropType: selectedCrop,
+          location: user.location?.city || 'Pakistan',
+          language: language
+        }),
+      });
+
+        if (response.status === 429) {
+          if (attempt < 1) {
+            setRetryCount(attempt + 1);
+            setTimeout(() => fetchWithRetry(attempt + 1), 2000);
+            return;
+          }
+        }
+
+        if (!response.ok) throw new Error('Failed to fetch advisory');
+
+        const data = await response.json();
+        if (data.success) {
+          setRecommendations(data.data.recommendations.map(rec => ({
+            ...rec,
+            icon: rec.category.toLowerCase().includes('irrigation') || rec.category.toLowerCase().includes('pani') || rec.category.includes('آبپاشي') ? Droplets : 
+                  rec.category.toLowerCase().includes('fertilizer') || rec.category.toLowerCase().includes('khad') || rec.category.includes('ڀاڻ') ? Sun : 
+                  rec.category.toLowerCase().includes('harvesting') || rec.category.toLowerCase().includes('katai') || rec.category.includes('لڻڻ') ? Leaf : 
+                  rec.category.toLowerCase().includes('land') || rec.category.toLowerCase().includes('zameen') ? Factory : Bug,
+            color: rec.category.toLowerCase().includes('irrigation') || rec.category.toLowerCase().includes('pani') || rec.category.includes('آبپاشي') ? 'from-blue-500 to-blue-700' : 
+                   rec.category.toLowerCase().includes('fertilizer') || rec.category.toLowerCase().includes('khad') || rec.category.includes('ڀاڻ') ? 'from-amber-500 to-amber-700' : 
+                   rec.category.toLowerCase().includes('harvesting') || rec.category.toLowerCase().includes('katai') || rec.category.includes('لڻڻ') ? 'from-green-600 to-green-800' : 
+                   rec.category.toLowerCase().includes('land') || rec.category.toLowerCase().includes('zameen') ? 'from-stone-500 to-stone-700' : 'from-red-500 to-red-700',
+          })));
+          
+          // Store best sowing date if available
+          if (data.data.best_sowing_date) {
+            setSelectedCropData({
+              name: data.data.crop,
+              sowingDate: data.data.best_sowing_date
+            });
+          }
+          
+          toast.success(t('AI Advisory generated!', 'AI مشورہ تیار ہے!', 'AI مشورو تيار آهي!'));
+        }
+      } catch (err) {
+        console.error('Advisory error:', err);
+        toast.error(t('Failed to connect to AI service', 'AI سروس سے منسلک ہونے میں ناکام', 'AI سروس سان ڳنڍڻ ۾ ناڪام'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWithRetry();
   };
 
   const crops = [
-    { value: 'wheat', label: '🌾 ' + t('Wheat', 'گندم'), icon: '🌾' },
-    { value: 'rice', label: '🌾 ' + t('Rice', 'چاول'), icon: '🌾' },
-    { value: 'cotton', label: '🌿 ' + t('Cotton', 'کپاس'), icon: '🌿' },
-    { value: 'sugarcane', label: '🎋 ' + t('Sugarcane', 'گنا'), icon: '🎋' },
-  ];
-
-  const recommendations = [
-    {
-      icon: Droplets,
-      title: t('Irrigation Schedule', 'آبپاشی کا شیڈول'),
-      description: t('Water your wheat every 7-10 days. Next irrigation 10', 'ہر 7-10 دنوں میں اپنی گندم کو پانی دیں'),
-      color: 'from-blue-500 to-blue-700',
-      schedule: [
-        { day: 'Nov 3', status: 'completed', amount: '50mm' },
-        { day: 'Nov 10', status: 'upcoming', amount: '45mm' },
-        { day: 'Nov 17', status: 'planned', amount: '50mm' },
-      ],
-    },
-    {
-      icon: Sun,
-      title: t('Fertilizer Application', 'کھاد کا اطلاق'),
-      description: t('Apply NPK fertilizer (20:10:10) at 150 kg/hectare', 'NPK کھاد (20:10:10) 150 کلوگرام فی ہیکٹر لگائیں'),
-      color: 'from-amber-500 to-amber-700',
-      schedule: [
-        { day: 'Nov 5', type: 'Urea', amount: '100 kg/ha' },
-        { day: 'Nov 20', type: 'DAP', amount: '75 kg/ha' },
-        { day: 'Dec 5', type: 'Potash', amount: '50 kg/ha' },
-      ],
-    },
-    {
-      icon: Bug,
-      title: t('Pest Control', 'کیڑے مار'),
-      description: t('Watch for aphids. Spray neem oil if detected', 'افڈز کے لیے دیکھیں۔ اگر پتہ چلے تو نیم کا تیل اسپرے کریں'),
-      color: 'from-red-500 to-red-700',
-      alerts: [
-        { pest: 'Aphids', risk: 'Medium', action: 'Monitor weekly' },
-        { pest: 'Stem Borer', risk: 'Low', action: 'Preventive spray' },
-      ],
-    },
+    { value: 'wheat', label: '🌾 ' + t('Wheat', 'گندم', 'ڪڻڪ'), icon: '🌾' },
+    { value: 'rice', label: '🌾 ' + t('Rice', 'چاول', 'چانور'), icon: '🌾' },
+    { value: 'cotton', label: '🌿 ' + t('Cotton', 'کپاس', 'ڪپهه'), icon: '🌿' },
+    { value: 'sugarcane', label: '🎋 ' + t('Sugarcane', 'گنا', 'ڪمند'), icon: '🎋' },
+    { value: 'maize', label: '🌽 ' + t('Maize', 'مکئی', 'مڪئي'), icon: '🌽' },
   ];
 
   return (
@@ -74,7 +119,7 @@ export const CropAdvisory = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-8 text-center"
         >
-          {t('AI Crop Advisory', 'AI فصل مشورہ')}
+          {t('AI Crop Advisory', 'AI فصل مشورہ', 'AI فصل جو مشورو')}
         </motion.h1>
 
         {/* Input Section */}
@@ -83,16 +128,16 @@ export const CropAdvisory = ({ onNavigate }) => {
           animate={{ scale: 1, opacity: 1, rotateX: 0 }}
           transition={{ delay: 0.2 }}
           whileHover={{ scale: 1.02 }}
-          style={{ transformStyle: 'preserve-3d' }}
+          style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
         >
-          <Card className="p-8 bg-white shadow-2xl mb-8">
-            <h2 className="text-gray-800 mb-6">{t('Select Your Crop', 'اپنی فصل منتخب کریں')}</h2>
+          <Card className="p-8 bg-white shadow-2xl mb-8 overflow-hidden transform-gpu">
+            <h2 className="text-gray-800 mb-6">{t('Select Your Crop', 'اپنی فصل منتخب کریں', 'پنهنجي فصل چونڊيو')}</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label className="text-gray-700 mb-2">{t('Crop Type', 'فصل کی قسم')}</Label>
+                <Label className="text-gray-700 mb-2">{t('Crop Type', 'فصل کی قسم', 'فصل جو قسم')}</Label>
                 <Select onValueChange={setSelectedCrop}>
                   <SelectTrigger className="py-6 border-2 border-green-200">
-                    <SelectValue placeholder={t('Choose crop...', 'فصل منتخب کریں...')} />
+                    <SelectValue placeholder={t('Choose crop...', 'فصل منتخب کریں...', 'فصل چونڊيو...')} />
                   </SelectTrigger>
                   <SelectContent>
                     {crops.map((crop) => (
@@ -104,7 +149,7 @@ export const CropAdvisory = ({ onNavigate }) => {
                 </Select>
               </div>
               <div>
-                <Label className="text-gray-700 mb-2">{t('Field Size (Hectares)', 'کھیت کا سائز (ہیکٹر)')}</Label>
+                <Label className="text-gray-700 mb-2">{t('Field Size (Hectares)', 'کھیت کا سائز (ہیکٹر)', 'ٻنيءَ جي سائيز (هيڪٽر)')}</Label>
                 <input
                   type="number"
                   placeholder="10"
@@ -119,51 +164,96 @@ export const CropAdvisory = ({ onNavigate }) => {
             >
               <Button
                 onClick={handleGetAdvisory}
+                disabled={loading || !selectedCrop}
                 className="w-full py-8 bg-green-600 hover:bg-green-700 text-white text-xl rounded-xl shadow-xl transition-all"
-                disabled={!selectedCrop}
               >
-                {t('Get Recommendations', 'سفارشات حاصل کریں')}
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    {t('AI Analyzing...', 'AI تجزیہ کر رہا ہے...', 'AI تجزيو ڪري رهيو آهي...')}
+                  </div>
+                ) : (
+                  <>
+                    <TrendingUp className="w-6 h-6 mr-2" />
+                    {t('Get AI Recommendations', 'AI مشورے حاصل کریں', 'AI مشورا حاصل ڪريو')}
+                  </>
+                )}
               </Button>
             </motion.div>
           </Card>
         </motion.div>
 
-        {/* Recommendations */}
-        {showRecommendations && (
-          <div className="grid md:grid-cols-3 gap-8">
-            {recommendations.map((rec, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50, rotateY: -90 }}
-                animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                transition={{ delay: index * 0.2 }}
-                whileHover={{ scale: 1.05, z: 50 }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <Card className="h-full bg-white shadow-2xl overflow-hidden group">
-                  <div className={`h-2 bg-gradient-to-r ${rec.color}`} />
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className={`p-3 rounded-full bg-gradient-to-br ${rec.color} text-white shadow-lg`}>
-                        <rec.icon className="w-6 h-6" />
+        {/* Recommendations Section */}
+        {recommendations.length > 0 && (
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-gray-800 mb-2">
+                {t('Personalized Advice for', 'آپ کے لیے ذاتی مشورہ', 'توهان لاءِ ذاتي مشورو')} {selectedCropData?.name || selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1)}
+              </h2>
+              {selectedCropData?.sowingDate && (
+                <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-full font-bold shadow-sm">
+                  <Calendar className="w-5 h-5" />
+                  {t('Best Sowing Window:', 'بیجائی کا بہترین وقت:', 'پوکي جو بهترين وقت:')} {selectedCropData.sowingDate}
+                </div>
+              )}
+            </motion.div>
+
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+              {recommendations.map((rec, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50, rotateY: -30 }}
+                  animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                  transition={{ delay: index * 0.2 }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+                >
+                  <Card className="h-full bg-white shadow-2xl overflow-hidden border-t-8 border-green-500 flex flex-col transform-gpu">
+                    <div className="p-8 flex-grow">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className={`p-4 rounded-2xl bg-gradient-to-br ${rec.color} text-white shadow-xl`}>
+                          <rec.icon className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-gray-800 text-xl font-bold leading-tight">{rec.title}</h3>
                       </div>
-                      <h3 className="text-gray-800 font-bold">{rec.title}</h3>
-                    </div>
-                    <p className="text-gray-600 mb-6">{rec.description}</p>
-                    {rec.schedule && (
-                      <div className="space-y-3">
-                        {rec.schedule.map((item, i) => (
-                          <div key={i} className="flex items-center justify-between text-sm border-b pb-2">
-                            <span className="text-gray-500">{item.day}</span>
-                            <span className="font-medium text-green-700">{item.amount || item.type}</span>
+                      
+                      <div className="mb-4">
+                        <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 mb-4 px-3 py-1">
+                          {rec.category}
+                        </Badge>
+                      </div>
+
+                      <p className="text-gray-600 mb-8 leading-relaxed text-sm">
+                        {rec.description}
+                      </p>
+
+                      {rec.schedule && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-gray-700 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            {t('Key Steps', 'اہم اقدامات', 'اهم قدم')}
+                          </h4>
+                          <div className="space-y-3">
+                            {rec.schedule.map((step, i) => (
+                              <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 group hover:border-green-300 transition-colors">
+                                <div className="w-2 h-2 bg-green-500 rounded-full mt-1.5 group-hover:scale-150 transition-transform flex-shrink-0" />
+                                <span className="text-sm text-gray-700 leading-snug">
+                                  {typeof step === 'string' ? step : (step.day + (step.amount ? ` - ${step.amount}` : ''))}
+                                </span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
         )}
       </div>

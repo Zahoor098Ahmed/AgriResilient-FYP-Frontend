@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { LanguageProvider } from './contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
@@ -23,10 +23,13 @@ const AdminPanel = lazy(() => import('./components/AdminPanel').then(module => (
 const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(module => ({ default: module.NotFoundPage })));
 
 function LoadingScreen() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-green-50">
       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600 mb-4"></div>
-      <p className="text-green-800 font-medium animate-pulse text-lg">Loading RecycleVision...</p>
+      <p className="text-green-800 font-medium animate-pulse text-lg">
+        {t('Loading RecycleVision...', 'RecycleVision لوڈ ہو رہا ہے...', 'RecycleVision لوڊ ٿي رهيو آهي...')}
+      </p>
     </div>
   );
 }
@@ -109,11 +112,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
-      {backendMessage && (
-        <div className="bg-green-100 text-green-800 p-2 text-center text-sm">
-          Backend Status: {backendMessage}
-        </div>
-      )}
+      
       <div className="pt-20">
         <Suspense fallback={<LoadingScreen />}>
           {renderPage()}

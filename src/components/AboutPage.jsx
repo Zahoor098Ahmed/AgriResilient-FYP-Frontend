@@ -8,16 +8,16 @@ export const AboutPage = ({ onNavigate }) => {
   const { t } = useLanguage();
 
   const team = [
-    { name: 'Dr. Ali Hassan', role: t('AI Researcher', 'AI محقق'), emoji: '👨‍💻' },
-    { name: 'Fatima Khan', role: t('Agricultural Expert', 'زرعی ماہر'), emoji: '👩‍🌾' },
-    { name: 'Ahmed Raza', role: t('Software Engineer', 'سافٹ ویئر انجینئر'), emoji: '👨‍💼' },
-    { name: 'Sara Malik', role: t('UX Designer', 'UX ڈیزائنر'), emoji: '👩‍🎨' },
+    { name: 'Dr. Ali Hassan', role: t('AI Researcher', 'AI محقق', 'AI محقق'), emoji: '👨‍💻' },
+    { name: 'Fatima Khan', role: t('Agricultural Expert', 'زرعی ماہر', 'زرعي ماهر'), emoji: '👩‍🌾' },
+    { name: 'Ahmed Raza', role: t('Software Engineer', 'سافٹ ویئر انجینئر', 'سافٽ ويئر انجنيئر'), emoji: '👨‍💼' },
+    { name: 'Sara Malik', role: t('UX Designer', 'UX ڈیزائنر', 'UX ڊيزائنر'), emoji: '👩‍🎨' },
   ];
 
   const values = [
-    { icon: Target, title: t('Mission', 'مشن'), desc: t('Empower farmers with AI technology', 'کسانوں کو AI ٹیکنالوجی سے بااختیار بنانا') },
-    { icon: Users, title: t('Community', 'کمیونٹی'), desc: t('Building sustainable farming networks', 'پائیدار کھیتی کے نیٹ ورک بنانا') },
-    { icon: Zap, title: t('Innovation', 'اختراع'), desc: t('Climate-smart solutions', 'موسمیاتی سمارٹ حل') },
+    { icon: Target, title: t('Mission', 'مشن', 'مشن'), desc: t('Empower farmers with AI technology', 'کسانوں کو AI ٹیکنالوجی سے بااختیار بنانا', 'هارين کي AI ٽيڪنالاجي سان بااختيار بڻائڻ') },
+    { icon: Users, title: t('Community', 'کمیونٹی', 'ڪميونٽي'), desc: t('Building sustainable farming networks', 'پائیدار کھیتی کے نیٹ ورک بنانا', 'پائيدار زراعت جا نيٽ ورڪ بڻائڻ') },
+    { icon: Zap, title: t('Innovation', 'اختراع', 'جدت'), desc: t('Climate-smart solutions', 'موسمیاتی سمارٹ حل', 'موسمياتي سمارٽ حل') },
   ];
 
   return (
@@ -28,7 +28,7 @@ export const AboutPage = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-12 text-center"
         >
-          {t('About AgriResilient', 'AgriResilient کے بارے میں')}
+          {t('About AgriResilient', 'AgriResilient کے بارے میں', 'AgriResilient بابت')}
         </motion.h1>
 
         <motion.div
@@ -40,13 +40,14 @@ export const AboutPage = ({ onNavigate }) => {
             <p className="text-gray-700 text-lg leading-relaxed">
               {t(
                 'AgriResilient is an AI-powered platform designed to help Pakistani farmers adapt to climate change through smart crop advisory, waste recycling, and carbon rewards.',
-                'AgriResilient ایک AI سے چلنے والا پلیٹ فارم ہے جو پاکستانی کسانوں کو موسمیاتی تبدیلی کے مطابق ڈھالنے میں مدد کرتا ہے۔'
+                'AgriResilient ایک AI سے چلنے والا پلیٹ فارم ہے جو پاکستانی کسانوں کو موسمیاتی تبدیلی کے مطابق ڈھالنے میں مدد کرتا ہے۔',
+                'AgriResilient هڪ AI سان هلندڙ پليٽ فارم آهي جيڪو پاڪستاني هارين کي موسمياتي تبديليءَ موجب ڍلڻ ۾ مدد ڪري ٿو.'
               )}
             </p>
           </Card>
         </motion.div>
 
-        <h2 className="text-gray-800 mb-8 text-center">{t('Our Values', 'ہماری اقدار')}</h2>
+        <h2 className="text-gray-800 mb-8 text-center">{t('Our Values', 'ہماری اقدار', 'اسان جون قدرون')}</h2>
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {values.map((value, index) => (
             <motion.div
@@ -71,7 +72,7 @@ export const AboutPage = ({ onNavigate }) => {
           ))}
         </div>
 
-        <h2 className="text-gray-800 mb-8 text-center">{t('Our Team', 'ہماری ٹیم')}</h2>
+        <h2 className="text-gray-800 mb-8 text-center">{t('Our Team', 'ہماری ٹیم', 'اسان جي ٽيم')}</h2>
         <div className="grid md:grid-cols-4 gap-6">
           {team.map((member, index) => (
             <motion.div

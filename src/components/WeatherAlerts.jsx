@@ -22,8 +22,8 @@ export const WeatherAlerts = ({ onNavigate }) => {
         
         // Show real notification if weather is extreme
         if (data.current.temperature_2m > 40) {
-          toast.error(t('Extreme Heat Alert!', 'شدید گرمی کا الرٹ!'), {
-            description: t('Temperature reached ' + data.current.temperature_2m + '°C', 'درجہ حرارت ' + data.current.temperature_2m + '°C تک پہنچ گیا ہے')
+          toast.error(t('Extreme Heat Alert!', 'شدید گرمی کا الرٹ!', 'شدید گرمي جو الرٽ!'), {
+            description: t('Temperature reached ' + data.current.temperature_2m + '°C', 'درجہ حرارت ' + data.current.temperature_2m + '°C تک پہنچ گیا ہے', 'درجه حرارت ' + data.current.temperature_2m + '°C تائين پهچي ويو آهي')
           });
         }
       } catch (err) {
@@ -37,17 +37,17 @@ export const WeatherAlerts = ({ onNavigate }) => {
   }, [t]);
 
   const getWeatherInfo = (code) => {
-    if (code === 0) return { label: t('Clear Sky', 'صاف آسمان'), icon: Sun, color: 'text-yellow-500' };
-    if (code <= 3) return { label: t('Partly Cloudy', 'جزوی طور پر ابر آلود'), icon: Cloud, color: 'text-blue-400' };
-    if (code >= 51) return { label: t('Rainy', 'بارش'), icon: CloudRain, color: 'text-blue-600' };
-    return { label: t('Clear', 'صاف'), icon: Sun, color: 'text-yellow-500' };
+    if (code === 0) return { label: t('Clear Sky', 'صاف آسمان', 'صاف آسمان'), icon: Sun, color: 'text-yellow-500' };
+    if (code <= 3) return { label: t('Partly Cloudy', 'جزوی طور پر ابر آلود', 'جزوي طور تي بادل'), icon: Cloud, color: 'text-blue-400' };
+    if (code >= 51) return { label: t('Rainy', 'بارش', 'برسات'), icon: CloudRain, color: 'text-blue-600' };
+    return { label: t('Clear', 'صاف', 'صاف'), icon: Sun, color: 'text-yellow-500' };
   };
 
   const alerts = [
     {
       severity: weatherData?.current?.temperature_2m > 35 ? 'high' : 'medium',
-      title: weatherData?.current?.temperature_2m > 35 ? t('Heat Wave Warning', 'ہیٹ ویو وارننگ') : t('Standard Advisory', 'معیاری مشورہ'),
-      description: weatherData ? t(`Current temperature is ${weatherData.current.temperature_2m}°C with ${weatherData.current.wind_speed_10m}km/h wind.`, `موجودہ درجہ حرارت ${weatherData.current.temperature_2m}°C ہے اور ہوا کی رفتار ${weatherData.current.wind_speed_10m} کلومیٹر فی گھنٹہ ہے۔`) : t('Loading real-time data...', 'حقیقی وقت کا ڈیٹا لوڈ ہو رہا ہے...'),
+      title: weatherData?.current?.temperature_2m > 35 ? t('Heat Wave Warning', 'ہیٹ ویو وارننگ', 'هيٽ ويو وارننگ') : t('Standard Advisory', 'معیاری مشورہ', 'معياري صلاح'),
+      description: weatherData ? t(`Current temperature is ${weatherData.current.temperature_2m}°C with ${weatherData.current.wind_speed_10m}km/h wind.`, `موجودہ درجہ حرارت ${weatherData.current.temperature_2m}°C ہے اور ہوا کی رفتار ${weatherData.current.wind_speed_10m} کلومیٹر فی گھنٹہ ہے۔`, `موجوده درجه حرارت ${weatherData.current.temperature_2m}°C آهي ۽ هوا جي رفتار ${weatherData.current.wind_speed_10m} ڪلوميٽر في ڪلاڪ آهي.`) : t('Loading real-time data...', 'حقیقی وقت کا ڈیٹا لوڈ ہو رہا ہے...', 'حقيقي وقت جو ڊيٽا لوڊ ٿي رهيو آهي...'),
       time: 'Live',
       icon: weatherData?.current?.temperature_2m > 35 ? AlertTriangle : Bell,
     },
@@ -61,7 +61,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-8 text-center"
         >
-          {t('Weather & Alerts', 'موسم اور الرٹس')}
+          {t('Weather & Alerts', 'موسم اور الرٹس', 'موسم ۽ الرٽس')}
         </motion.h1>
 
         {/* Map */}
@@ -75,7 +75,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
               <div className="h-96 flex items-center justify-center bg-gray-50 rounded-xl animate-pulse">
                 <div className="text-center">
                   <div className="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                  <p className="text-gray-500 font-medium">{t('Loading live weather data...', 'حقیقی وقت کا ڈیٹا لوڈ ہو رہا ہے...')}</p>
+                  <p className="text-gray-500 font-medium">{t('Loading live weather data...', 'حقیقی وقت کا ڈیٹا لوڈ ہو رہا ہے...', 'حقيقي وقت جو ڊيٽا لوڊ ٿي رهيو آهي...')}</p>
                 </div>
               </div>
             ) : (
@@ -103,7 +103,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
                   <div className="absolute bottom-6 left-6 right-6 p-4 bg-black/30 backdrop-blur-md rounded-xl border border-white/20 text-white">
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold">Pakistan Regional Forecast</span>
-                      <Badge className="bg-green-500 text-white">{t('Live', 'لائیو')}</Badge>
+                      <Badge className="bg-green-500 text-white">{t('Live', 'لائیو', 'لائيو')}</Badge>
                     </div>
                   </div>
                 </div>
@@ -114,7 +114,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
                       <Thermometer className="w-10 h-10 text-red-500" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">{t('Temperature', 'درجہ حرارت')}</p>
+                      <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">{t('Temperature', 'درجہ حرارت', 'درجه حرارت')}</p>
                       <h3 className="text-4xl font-black text-gray-800">{weatherData.current.temperature_2m}°C</h3>
                     </div>
                   </div>
@@ -122,12 +122,12 @@ export const WeatherAlerts = ({ onNavigate }) => {
                   <div className="grid grid-cols-2 gap-6">
                     <div className="p-6 bg-blue-50 rounded-2xl border-2 border-blue-100">
                       <Droplets className="w-8 h-8 text-blue-500 mb-3" />
-                      <p className="text-sm text-gray-500 font-bold">{t('Humidity', 'نمی')}</p>
+                      <p className="text-sm text-gray-500 font-bold">{t('Humidity', 'نمی', 'نيمو')}</p>
                       <h4 className="text-2xl font-bold text-gray-800">{weatherData.current.relative_humidity_2m}%</h4>
                     </div>
                     <div className="p-6 bg-amber-50 rounded-2xl border-2 border-amber-100">
                       <Wind className="w-8 h-8 text-amber-500 mb-3" />
-                      <p className="text-sm text-gray-500 font-bold">{t('Wind Speed', 'ہوا کی رفتار')}</p>
+                      <p className="text-sm text-gray-500 font-bold">{t('Wind Speed', 'ہوا کی رفتار', 'هوا جي رفتار')}</p>
                       <h4 className="text-2xl font-bold text-gray-800">{weatherData.current.wind_speed_10m} km/h</h4>
                     </div>
                   </div>
@@ -138,7 +138,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
                         <Cloud className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500 font-bold">{t('Condition', 'حالت')}</p>
+                        <p className="text-sm text-gray-500 font-bold">{t('Condition', 'حالت', 'حالت')}</p>
                         <h4 className="text-xl font-bold text-gray-800">{getWeatherInfo(weatherData.current.weather_code).label}</h4>
                       </div>
                     </div>
@@ -150,7 +150,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
         </motion.div>
 
         {/* Alerts */}
-        <h2 className="text-gray-800 mb-6">{t('Active Alerts', 'فعال الرٹس')}</h2>
+        <h2 className="text-gray-800 mb-6">{t('Active Alerts', 'فعال الرٹس', 'فعال الرٽس')}</h2>
         <div className="space-y-4">
           {alerts.map((alert, index) => (
             <motion.div
@@ -192,7 +192,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
                       </Badge>
                     </div>
                     <p className="text-gray-600 mb-2">{alert.description}</p>
-                    <p className="text-gray-500 text-sm">{alert.time}</p>
+                    <p className="text-gray-500 text-sm">{t(alert.time, 'لائیو', 'لائيو')}</p>
                   </div>
                 </div>
               </Card>

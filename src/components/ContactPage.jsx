@@ -26,7 +26,7 @@ export const ContactPage = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-8 text-center"
         >
-          {t('Contact Us', 'ہم سے رابطہ کریں')}
+          {t('Contact Us', 'ہم سے رابطہ کریں', 'اسان سان رابطو ڪريو')}
         </motion.h1>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -35,19 +35,19 @@ export const ContactPage = ({ onNavigate }) => {
             animate={{ x: 0, opacity: 1 }}
           >
             <Card className="p-8 bg-white shadow-2xl h-full">
-              <h2 className="text-gray-800 mb-6">{t('Get In Touch', 'رابطے میں رہیں')}</h2>
+              <h2 className="text-gray-800 mb-6">{t('Get In Touch', 'رابطے میں رہیں', 'رابطي ۾ رهو')}</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <Label>{t('Name', 'نام')}</Label>
-                  <Input className="mt-2 py-6" placeholder={t('Your name', 'آپ کا نام')} required />
+                  <Label>{t('Name', 'نام', 'نالو')}</Label>
+                  <Input className="mt-2 py-6" placeholder={t('Your name', 'آپ کا نام', 'توهان جو نالو')} required />
                 </div>
                 <div>
-                  <Label>{t('Email', 'ای میل')}</Label>
-                  <Input type="email" className="mt-2 py-6" placeholder={t('Your email', 'آپ کا ای میل')} required />
+                  <Label>{t('Email', 'ای میل', 'اي ميل')}</Label>
+                  <Input type="email" className="mt-2 py-6" placeholder={t('Your email', 'آپ کا ای میل', 'توهان جي اي ميل')} required />
                 </div>
                 <div>
-                  <Label>{t('Message', 'پیغام')}</Label>
-                  <Textarea className="mt-2" rows={5} placeholder={t('Your message...', 'آپ کا پیغام...')} required />
+                  <Label>{t('Message', 'پیغام', 'پيغام')}</Label>
+                  <Textarea className="mt-2" rows={5} placeholder={t('Your message...', 'آپ کا پیغام...', 'توهان جو پيغام...')} required />
                 </div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
@@ -64,7 +64,7 @@ export const ContactPage = ({ onNavigate }) => {
                     ) : (
                       <>
                         <Send className="w-5 h-5 mr-2 inline" />
-                        {t('Send Message', 'پیغام بھیجیں')}
+                        {t('Send Message', 'پیغام بھیجیں', 'پيغام موڪليو')}
                       </>
                     )}
                   </Button>
@@ -79,9 +79,9 @@ export const ContactPage = ({ onNavigate }) => {
             className="space-y-6"
           >
             {[
-              { icon: Mail, title: t('Email', 'ای میل'), value: 'info@agriresilient.pk' },
-              { icon: Phone, title: t('Phone', 'فون'), value: '+92 300 1234567' },
-              { icon: MapPin, title: t('Address', 'پتہ'), value: t('Islamabad, Pakistan', 'اسلام آباد، پاکستان') },
+              { icon: Mail, title: t('Email', 'ای میل', 'اي ميل'), value: 'info@agriresilient.pk' },
+              { icon: Phone, title: t('Phone', 'فون', 'فون'), value: '+92 300 1234567' },
+              { icon: MapPin, title: t('Address', 'پتہ', 'پتو'), value: t('Islamabad, Pakistan', 'اسلام آباد، پاکستان', 'اسلام آباد، پاڪستان') },
             ].map((contact, index) => (
               <motion.div
                 key={index}
