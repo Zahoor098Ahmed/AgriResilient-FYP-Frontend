@@ -11,7 +11,7 @@ import { Switch } from './ui/switch';
 import { toast } from 'sonner';
 
 export const ProfilePage = ({ onNavigate }) => {
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { user, logout, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,12 +22,38 @@ export const ProfilePage = ({ onNavigate }) => {
 
   if (!user) return null;
 
+  const handleLanguageChange = async (newLang) => {
+    setLanguage(newLang);
+    try {
+      await updateProfile({ preferredLanguage: newLang });
+    } catch (err) {
+      console.error('Failed to save language preference:', err);
+    }
+  };
+
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      const result = await updateProfile(formData);
+      let updateData = { ...formData };
+
+      // Geocoding logic: Get Lat/Lon from city name using Open-Meteo Geocoding API (Free)
+      if (formData.city && formData.city !== user?.location?.city) {
+        try {
+          const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(formData.city)}&count=1&language=en&format=json`);
+          const geoData = await geoRes.json();
+          if (geoData.results && geoData.results.length > 0) {
+            updateData.lat = geoData.results[0].latitude;
+            updateData.lon = geoData.results[0].longitude;
+            updateData.city = geoData.results[0].name; // Normalized name
+          }
+        } catch (geoErr) {
+          console.error('Geocoding error:', geoErr);
+        }
+      }
+
+      const result = await updateProfile(updateData);
       if (result.success) {
-        toast.success(t('Profile updated successfully!', 'پروفائل کامیابی سے اپ ڈیٹ ہو گئی!'));
+        toast.success(t('Profile updated successfully!', 'پروفائل کامیابی سے اپ ڈیٹ ہو گئی!', 'پروفائل ڪاميابي سان اپڊيٽ ٿي وئي!'));
         setIsEditing(false);
       } else {
         toast.error(result.message);
@@ -47,7 +73,7 @@ export const ProfilePage = ({ onNavigate }) => {
           animate={{ y: 0, opacity: 1 }}
           className="text-gray-800 mb-8 text-center text-4xl font-black"
         >
-          {t('Profile & Settings', 'پروفائل اور ترتیبات')}
+          {t('Profile & Settings', 'پروفائل اور ترتیبات', 'پروفائل ۽ سيٽنگون')}
         </motion.h1>
 
         {/* Avatar Section */}
@@ -75,7 +101,7 @@ export const ProfilePage = ({ onNavigate }) => {
             </motion.div>
             <h2 className="text-3xl font-bold text-gray-800">{user.name}</h2>
             <p className="text-gray-600 font-medium">
-              {user.role === 'admin' ? t('Administrator', 'ایڈمنسٹریٹر') : t('Member', 'ممبر')} • {user.location?.city || 'Punjab, Pakistan'}
+              {user.role === 'admin' ? t('Administrator', 'ایڈمنسٹریٹر', 'ايڊمنسٽريٽر') : t('Member', 'ممبر', 'ميمبر')} • {user.location?.city || 'Punjab, Pakistan'}
             </p>
           </Card>
         </motion.div>
@@ -88,19 +114,19 @@ export const ProfilePage = ({ onNavigate }) => {
         >
           <Card className="p-8 bg-white shadow-xl border-2 border-white/50">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">{t('Personal Information', 'ذاتی معلومات')}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{t('Personal Information', 'ذاتی معلومات', 'ذاتي معلومات')}</h2>
               <Button 
                 variant="outline" 
                 onClick={() => setIsEditing(!isEditing)}
                 className="border-green-600 text-green-600 hover:bg-green-50"
               >
-                {isEditing ? t('Cancel', 'کینسل') : t('Edit Profile', 'پروفائل تبدیل کریں')}
+                {isEditing ? t('Cancel', 'کینسل', 'منسوخ') : t('Edit Profile', 'پروفائل تبدیل کریں', 'پروفائل تبديل ڪريو')}
               </Button>
             </div>
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <Label className="text-gray-700 font-bold">{t('Full Name', 'پورا نام')}</Label>
+                  <Label className="text-gray-700 font-bold">{t('Full Name', 'پورا نام', 'پورو نالو')}</Label>
                   <div className="relative mt-2">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <Input 
@@ -112,7 +138,7 @@ export const ProfilePage = ({ onNavigate }) => {
                   </div>
                 </div>
                 <div>
-                  <Label className="text-gray-700 font-bold">{t('Email', 'ای میل')}</Label>
+                  <Label className="text-gray-700 font-bold">{t('Email', 'ای میل', 'اي ميل')}</Label>
                   <div className="relative mt-2">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <Input className="pl-10 py-6 bg-gray-50 border-gray-200" defaultValue={user.email} disabled />
@@ -120,14 +146,14 @@ export const ProfilePage = ({ onNavigate }) => {
                 </div>
               </div>
               <div>
-                <Label className="text-gray-700 font-bold">{t('Location', 'مقام')}</Label>
+                <Label className="text-gray-700 font-bold">{t('Location', 'مقام', 'جڳهه')}</Label>
                 <div className="relative mt-2">
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <Input 
                     className="pl-10 py-6 bg-gray-50 border-gray-200" 
                     value={formData.city} 
                     onChange={(e) => setFormData({...formData, city: e.target.value})}
-                    placeholder={t('Enter your city', 'اپنا شہر درج کریں')}
+                    placeholder={t('Enter your city', 'اپنا شہر درج کریں', 'پنهنجو شهر داخل ڪريو')}
                     disabled={!isEditing} 
                   />
                 </div>
@@ -139,7 +165,7 @@ export const ProfilePage = ({ onNavigate }) => {
                     disabled={isLoading}
                     className="w-full bg-green-600 py-6 rounded-xl font-bold shadow-lg shadow-green-200"
                   >
-                    {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Save Changes', 'تبدیلیاں محفوظ کریں')}
+                    {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Save Changes', 'تبدیلیاں محفوظ کریں', 'تبديليون محفوظ ڪريو')}
                   </Button>
                 </div>
               )}
@@ -154,21 +180,43 @@ export const ProfilePage = ({ onNavigate }) => {
           transition={{ delay: 0.2 }}
         >
           <Card className="p-8 bg-white shadow-xl">
-            <h2 className="text-gray-800 mb-6">{t('Preferences', 'ترجیحات')}</h2>
+            <h2 className="text-gray-800 mb-6">{t('Preferences', 'ترجیحات', 'ترجيحات')}</h2>
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Bell className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">{t('Push Notifications', 'پش نوٹیفیکیشنز')}</span>
+                  <span className="text-gray-700">{t('Push Notifications', 'پش نوٹیفیکیشنز', 'پش نوٽيفڪيشنز')}</span>
                 </div>
                 <Switch />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Globe className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">{t('Language', 'زبان')}</span>
+                  <span className="text-gray-700">{t('Language', 'زبان', 'ٻولي')}</span>
                 </div>
-                <Button variant="outline">{t('Change', 'تبدیل کریں')}</Button>
+                <div className="flex gap-2">
+                  <Button 
+                    variant={language === 'en' ? 'default' : 'outline'}
+                    onClick={() => handleLanguageChange('en')}
+                    className={language === 'en' ? 'bg-green-600' : ''}
+                  >
+                    EN
+                  </Button>
+                  <Button 
+                    variant={language === 'ur' ? 'default' : 'outline'}
+                    onClick={() => handleLanguageChange('ur')}
+                    className={language === 'ur' ? 'bg-green-600' : ''}
+                  >
+                    اردو
+                  </Button>
+                  <Button 
+                    variant={language === 'sd' ? 'default' : 'outline'}
+                    onClick={() => handleLanguageChange('sd')}
+                    className={language === 'sd' ? 'bg-green-600' : ''}
+                  >
+                    سنڌي
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="mt-8">
@@ -179,7 +227,7 @@ export const ProfilePage = ({ onNavigate }) => {
                 }}
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-6 rounded-xl shadow-lg shadow-red-100"
               >
-                {t('Logout', 'لاگ آؤٹ')}
+                {t('Logout', 'لاگ آؤٹ', 'لاگ آئوٽ')}
               </Button>
             </div>
           </Card>

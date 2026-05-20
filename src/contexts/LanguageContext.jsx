@@ -1,20 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  // Load language from localStorage or default to 'en'
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('userLanguage') || 'en';
+    const saved = localStorage.getItem('preferredLanguage');
+    return saved || 'en';
   });
 
-  // Persist language to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('userLanguage', language);
-    // Also update HTML lang attribute for accessibility
-    document.documentElement.lang = language;
-    // Keep structure same (LTR), only change font if needed
-  }, [language]);
+  const handleLanguageChange = (newLang) => {
+    setLanguage(newLang);
+    localStorage.setItem('preferredLanguage', newLang);
+  };
 
   const t = (en, ur, sd) => {
     if (language === 'ur') return ur || en;
@@ -23,7 +20,7 @@ export const LanguageProvider = ({ children }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleLanguageChange, t }}>
       {children}
     </LanguageContext.Provider>
   );

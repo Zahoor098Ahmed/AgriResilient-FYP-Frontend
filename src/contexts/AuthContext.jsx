@@ -1,8 +1,10 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const { setLanguage } = useLanguage();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -54,7 +56,13 @@ export const AuthProvider = ({ children }) => {
 
         const data = await response.json();
         if (data.success) {
-          setUser(data.data.user);
+          const fetchedUser = data.data.user;
+          setUser(fetchedUser);
+          
+          // Sync language from user preferences if available and not already set in session
+          if (fetchedUser.preferredLanguage && !localStorage.getItem('preferredLanguage')) {
+            setLanguage(fetchedUser.preferredLanguage);
+          }
         } else {
           logout();
         }
@@ -83,7 +91,15 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         localStorage.setItem('token', data.token);
         setToken(data.token);
-        setUser(data.data.user);
+        const loggedInUser = data.data.user;
+        setUser(loggedInUser);
+        
+        // Apply user's language preference immediately after login
+        if (loggedInUser.preferredLanguage) {
+          localStorage.setItem('preferredLanguage', loggedInUser.preferredLanguage);
+          setLanguage(loggedInUser.preferredLanguage);
+        }
+        
         return { success: true };
       } else {
         // Handle validation errors array if it exists
@@ -137,7 +153,15 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         localStorage.setItem('token', data.token);
         setToken(data.token);
-        setUser(data.data.user);
+        const loggedInUser = data.data.user;
+        setUser(loggedInUser);
+
+        // Apply language preference
+        if (loggedInUser.preferredLanguage) {
+          localStorage.setItem('preferredLanguage', loggedInUser.preferredLanguage);
+          setLanguage(loggedInUser.preferredLanguage);
+        }
+
         return { success: true };
       } else {
         return { success: false, message: data.message || 'Social login failed' };
@@ -150,8 +174,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.setItem('preferredLanguage', 'en'); 
     setToken(null);
     setUser(null);
+    setLanguage('en'); 
   };
 
   const updateProfile = async (profileData) => {
@@ -227,7 +253,14 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         localStorage.setItem('token', data.token);
         setToken(data.token);
-        setUser(data.data.user);
+        const loggedInUser = data.data.user;
+        setUser(loggedInUser);
+
+        // Apply language preference
+        if (loggedInUser.preferredLanguage) {
+          localStorage.setItem('preferredLanguage', loggedInUser.preferredLanguage);
+          setLanguage(loggedInUser.preferredLanguage);
+        }
       }
       return data;
     } catch (error) {

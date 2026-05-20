@@ -21,9 +21,10 @@ export const Dashboard = ({ onNavigate }) => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const city = user?.location?.city || 'Punjab, Pakistan';
-        // Simple search for coordinates based on city (simulation or simple mapping)
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=30.3753&longitude=69.3451&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`);
+        const lat = user?.location?.lat || 30.3753;
+        const lon = user?.location?.lon || 69.3451;
+        // Using User's specific coordinates or default
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`);
         const data = await res.json();
         setWeatherData({
           temp: data.current.temperature_2m,

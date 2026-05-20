@@ -9,7 +9,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [weatherAlert, setWeatherAlert] = useState(null);
 
@@ -35,6 +35,17 @@ export const Navigation = ({ currentPage, onNavigate }) => {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [t]);
+
+  const handleLanguageChange = async (newLang) => {
+    setLanguage(newLang);
+    if (user) {
+      try {
+        await updateProfile({ preferredLanguage: newLang });
+      } catch (err) {
+        console.error('Failed to sync language to profile:', err);
+      }
+    }
+  };
 
   const navLinks = [
     { id: 'home', label: t('Home', 'ہوم', 'گھر'), icon: Home },
@@ -80,19 +91,6 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                 AgriResilient
               </span>
             </motion.div>
-
-            {/* Live Weather Ticker */}
-            {weatherAlert && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="hidden lg:flex items-center gap-2 px-4 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-amber-700 text-sm font-bold shadow-sm cursor-pointer"
-                onClick={() => onNavigate('weather')}
-              >
-                <CloudSun className="w-4 h-4 animate-pulse" />
-                <span>{weatherAlert}</span>
-              </motion.div>
-            )}
           </div>
 
           {/* Desktop Nav */}
@@ -102,7 +100,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                 <motion.button
                   key={link.id}
                   onClick={() => onNavigate(link.id)}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative ${
                     currentPage === link.id
                       ? 'bg-green-600 text-white shadow-lg'
                       : 'text-gray-600 hover:bg-green-50 hover:text-green-700'
@@ -112,6 +110,12 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                 >
                   <link.icon className="w-4 h-4" />
                   {link.label}
+                  {link.id === 'weather' && weatherAlert && (
+                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
+                    </span>
+                  )}
                 </motion.button>
               ))}
             </div>
@@ -188,7 +192,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                       <button
                         key={lang.code}
                         onClick={() => {
-                          setLanguage(lang.code);
+                          handleLanguageChange(lang.code);
                           setShowLangMenu(false);
                         }}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-green-50 transition-colors ${
@@ -235,7 +239,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                     onNavigate(link.id);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-left ${
+                  className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-left relative ${
                     currentPage === link.id
                       ? 'bg-green-600 text-white'
                       : 'text-gray-600 hover:bg-green-50'
@@ -243,6 +247,12 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                 >
                   <link.icon className="w-5 h-5" />
                   {link.label}
+                  {link.id === 'weather' && weatherAlert && (
+                    <span className="absolute top-3 right-4 flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
+                    </span>
+                  )}
                 </button>
               ))}
               <div className="pt-4 border-t border-gray-100 flex justify-between items-center px-4">
@@ -251,7 +261,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                     <button
                       key={lang.code}
                       onClick={() => {
-                        setLanguage(lang.code);
+                        handleLanguageChange(lang.code);
                         setIsOpen(false);
                       }}
                       className={`px-3 py-1 rounded-lg text-xs font-bold ${

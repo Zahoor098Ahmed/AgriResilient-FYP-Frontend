@@ -219,9 +219,9 @@ export const LoginPage = ({ onNavigate }) => {
             >
               <Globe className="w-10 h-10 text-white" />
             </motion.div>
-            <h2 className="text-gray-800 mb-2">{t('Welcome to AgriResilient', 'AgriResilient میں خوش آمدید')}</h2>
+            <h2 className="text-gray-800 mb-2">{t('Welcome to AgriResilient', 'AgriResilient میں خوش آمدید', 'AgriResilient ۾ ڀليڪار')}</h2>
             <p className="text-gray-600">
-              {t('Climate-smart farming solutions', 'موسمیاتی سمارٹ کھیتی کے حل')}
+              {t('Climate-smart farming solutions', 'موسمیاتی سمارٹ کھیتی کے حل', 'موسمياتي سمارٽ فارمنگ جا حل')}
             </p>
           </motion.div>
 
@@ -246,8 +246,8 @@ export const LoginPage = ({ onNavigate }) => {
                   exit={{ opacity: 0, x: 20 }}
                 >
                   <TabsList className="grid w-full grid-cols-2 mb-8">
-                    <TabsTrigger value="login">{t('Login', 'لاگ ان')}</TabsTrigger>
-                    <TabsTrigger value="register">{t('Register', 'رجسٹر')}</TabsTrigger>
+                    <TabsTrigger value="login">{t('Login', 'لاگ ان', 'لاگ ان')}</TabsTrigger>
+                    <TabsTrigger value="register">{t('Register', 'رجسٹر', 'رجسٽر')}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="login">
@@ -258,14 +258,14 @@ export const LoginPage = ({ onNavigate }) => {
                         transition={{ delay: 0.4 }}
                       >
                         <Label htmlFor="email" className="text-gray-700">
-                          {t('Email', 'ای میل')}
+                          {t('Email', 'ای میل', 'اي ميل')}
                         </Label>
                         <div className="relative mt-2">
                           <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                           <Input
                             id="email"
                             type="email"
-                            placeholder={t('Enter your email', 'اپنا ای میل درج کریں')}
+                            placeholder={t('Enter your email', 'اپنا ای میل درج کریں', 'پنهنجي اي ميل داخل ڪريو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.email}
                             onChange={handleInputChange}
@@ -281,14 +281,14 @@ export const LoginPage = ({ onNavigate }) => {
                       >
                         <div className="flex justify-between items-center">
                           <Label htmlFor="password" className="text-gray-700">
-                            {t('Password', 'پاس ورڈ')}
+                            {t('Password', 'پاس ورڈ', 'پاسورڊ')}
                           </Label>
                           <button
                             type="button"
                             onClick={() => setView('forgot')}
                             className="text-xs text-green-600 hover:text-green-800 font-medium"
                           >
-                            {t('Forgot Password?', 'پاس ورڈ بھول گئے؟')}
+                            {t('Forgot Password?', 'پاس ورڈ بھول گئے؟', 'پاسورڊ وسري ويو؟')}
                           </button>
                         </div>
                         <div className="relative mt-2">
@@ -296,7 +296,7 @@ export const LoginPage = ({ onNavigate }) => {
                           <Input
                             id="password"
                             type="password"
-                            placeholder={t('Enter your password', 'اپنا پاس ورڈ درج کریں')}
+                            placeholder={t('Enter your password', 'اپنا پاس ورڈ درج کریں', 'پنهنجو پاسورڊ داخل ڪريو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.password}
                             onChange={handleInputChange}
@@ -322,7 +322,7 @@ export const LoginPage = ({ onNavigate }) => {
                               className="w-6 h-6 border-4 border-white border-t-transparent rounded-full mx-auto"
                             />
                           ) : (
-                            t('Login', 'لاگ ان')
+                            t('Login', 'لاگ ان', 'لاگ ان')
                           )}
                         </Button>
                       </motion.div>
@@ -332,7 +332,7 @@ export const LoginPage = ({ onNavigate }) => {
                   <TabsContent value="register">
                     <div className="mb-4 flex items-center gap-2 text-[10px] text-gray-400 bg-gray-50 p-2 rounded-lg border border-gray-100">
                       <Bot className="w-3 h-3" />
-                      <span>{t('Anti-bot protection active', 'اینٹی بوٹ تحفظ فعال ہے')}</span>
+                      <span>{t('Anti-bot protection active', 'اینٹی بوٹ تحفظ فعال ہے', 'اينٽي بوٽ تحفظ فعال آهي')}</span>
                     </div>
                     <form onSubmit={handleSignupSubmit} className="space-y-6">
                       {/* Honeypot field - hidden from users */}
@@ -351,14 +351,14 @@ export const LoginPage = ({ onNavigate }) => {
                         transition={{ delay: 0.4 }}
                       >
                         <Label htmlFor="name" className="text-gray-700">
-                          {t('Full Name', 'پورا نام')}
+                          {t('Full Name', 'پورا نام', 'پورو نالو')}
                         </Label>
                         <div className="relative mt-2">
                           <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                           <Input
                             id="name"
                             type="text"
-                            placeholder={t('Enter your name', 'اپنا نام درج کریں')}
+                            placeholder={t('Enter your name', 'اپنا نام درج کریں', 'پنهنجو نالو داخل ڪريو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.name}
                             onChange={handleInputChange}
@@ -373,14 +373,14 @@ export const LoginPage = ({ onNavigate }) => {
                         transition={{ delay: 0.6 }}
                       >
                         <Label htmlFor="email" className="text-gray-700">
-                          {t('Email', 'ای میل')}
+                          {t('Email', 'ای میل', 'اي ميل')}
                         </Label>
                         <div className="relative mt-2">
                           <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                           <Input
                             id="email"
                             type="email"
-                            placeholder={t('Enter your email', 'اپنا ای میل درج کریں')}
+                            placeholder={t('Enter your email', 'اپنا ای میل درج کریں', 'پنهنجي اي ميل داخل ڪريو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.email}
                             onChange={handleInputChange}
@@ -394,21 +394,21 @@ export const LoginPage = ({ onNavigate }) => {
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.65 }}
                       >
-                        <Label className="text-gray-700">{t('Gender', 'جنس')}</Label>
+                        <Label className="text-gray-700">{t('Gender', 'جنس', 'جنس')}</Label>
                         <div className="flex gap-4 mt-2">
                           <button
                             type="button"
                             onClick={() => setFormData({...formData, gender: 'male'})}
                             className={`flex-1 py-3 rounded-xl border-2 transition-all ${formData.gender === 'male' ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500'}`}
                           >
-                            ♂ {t('Male', 'مرد')}
+                            ♂ {t('Male', 'مرد', 'مرد')}
                           </button>
                           <button
                             type="button"
                             onClick={() => setFormData({...formData, gender: 'female'})}
                             className={`flex-1 py-3 rounded-xl border-2 transition-all ${formData.gender === 'female' ? 'border-pink-500 bg-pink-50 text-pink-700' : 'border-gray-200 text-gray-500'}`}
                           >
-                            ♀ {t('Female', 'عورت')}
+                            ♀ {t('Female', 'عورت', 'عورت')}
                           </button>
                         </div>
                       </motion.div>
@@ -419,14 +419,14 @@ export const LoginPage = ({ onNavigate }) => {
                         transition={{ delay: 0.7 }}
                       >
                         <Label htmlFor="password" className="text-gray-700">
-                          {t('Password', 'پاس ورڈ')}
+                          {t('Password', 'پاس ورڈ', 'پاسورڊ')}
                         </Label>
                         <div className="relative mt-2">
                           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                           <Input
                             id="password"
                             type="password"
-                            placeholder={t('Create a password', 'پاس ورڈ بنائیں')}
+                            placeholder={t('Create a password', 'پاس ورڈ بنائیں', 'پاسورڊ ٺاهيو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.password}
                             onChange={handleInputChange}
@@ -441,14 +441,14 @@ export const LoginPage = ({ onNavigate }) => {
                         transition={{ delay: 0.8 }}
                       >
                         <Label htmlFor="confirmPassword" className="text-gray-700">
-                          {t('Confirm Password', 'پاس ورڈ کی تصدیق کریں')}
+                          {t('Confirm Password', 'پاس ورڈ کی تصدیق کریں', 'پاسورڊ جي تصديق ڪريو')}
                         </Label>
                         <div className="relative mt-2">
                           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                           <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder={t('Confirm your password', 'اپنے پاس ورڈ کی تصدیق کریں')}
+                            placeholder={t('Confirm your password', 'اپنے پاس ورڈ کی تصدیق کریں', 'پنهنجي پاسورڊ جي تصديق ڪريو')}
                             className="pl-10 py-6 border-2 border-green-200 focus:border-green-500 rounded-xl"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
@@ -475,7 +475,7 @@ export const LoginPage = ({ onNavigate }) => {
                             />
                           ) : (
                             <>
-                              {t('Register', 'رجسٹر')} 🌱
+                              {t('Register', 'رجسٹر', 'رجسٽر')} 🌱
                             </>
                           )}
                         </Button>
@@ -492,14 +492,14 @@ export const LoginPage = ({ onNavigate }) => {
                   className="space-y-6"
                 >
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-800">{t('Reset Password', 'پاس ورڈ تبدیل کریں')}</h3>
+                    <h3 className="text-xl font-bold text-gray-800">{t('Reset Password', 'پاس ورڈ تبدیل کریں', 'پاسورڊ تبديل ڪريو')}</h3>
                     <p className="text-sm text-gray-600 mt-2">
-                      {t('Enter your email to receive a reset OTP', 'او ٹی پی حاصل کرنے کے لیے اپنا ای میل درج کریں')}
+                      {t('Enter your email to receive a reset OTP', 'او ٹی پی حاصل کرنے کے لیے اپنا ای میل درج کریں', 'او ٽي پي حاصل ڪرڻ لاءِ پنهنجي اي ميل داخل ڪريو')}
                     </p>
                   </div>
                   <form onSubmit={handleForgotPassword} className="space-y-6">
                     <div>
-                      <Label htmlFor="email" className="text-gray-700">{t('Email', 'ای میل')}</Label>
+                      <Label htmlFor="email" className="text-gray-700">{t('Email', 'ای میل', 'اي ميل')}</Label>
                       <div className="relative mt-2">
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
@@ -514,10 +514,10 @@ export const LoginPage = ({ onNavigate }) => {
                       </div>
                     </div>
                     <Button type="submit" className="w-full bg-green-600 py-6 rounded-xl" disabled={isLoading}>
-                      {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Send OTP', 'او ٹی پی بھیجیں')}
+                      {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Send OTP', 'او ٹی پی بھیجیں', 'او ٽي پي موڪليو')}
                     </Button>
                     <button type="button" onClick={() => setView('auth')} className="w-full flex items-center justify-center gap-2 text-sm text-gray-500">
-                      <ArrowLeft className="w-4 h-4" /> {t('Back to Login', 'لاگ ان پر واپس جائیں')}
+                      <ArrowLeft className="w-4 h-4" /> {t('Back to Login', 'لاگ ان پر واپس جائیں', 'لاگ ان تي واپس وڃو')}
                     </button>
                   </form>
                 </motion.div>
@@ -530,14 +530,14 @@ export const LoginPage = ({ onNavigate }) => {
                   className="space-y-6"
                 >
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-800">{t('Verify OTP', 'او ٹی پی کی تصدیق کریں')}</h3>
+                    <h3 className="text-xl font-bold text-gray-800">{t('Verify OTP', 'او ٹی پی کی تصدیق کریں', 'او ٽي پي جي تصديق ڪريو')}</h3>
                     <p className="text-sm text-gray-600 mt-2">
-                      {t('Enter the 6-digit code and your new password', '6 ہندسوں کا کوڈ اور نیا پاس ورڈ درج کریں')}
+                      {t('Enter the 6-digit code and your new password', '6 ہندسوں کا کوڈ اور نیا پاس ورڈ درج کریں', '6 انگن جو ڪوڊ ۽ نئون پاسورڊ داخل ڪريو')}
                     </p>
                   </div>
                   <form onSubmit={handleResetPassword} className="space-y-6">
                     <div>
-                      <Label htmlFor="otp" className="text-gray-700">{t('OTP Code', 'او ٹی پی کوڈ')}</Label>
+                      <Label htmlFor="otp" className="text-gray-700">{t('OTP Code', 'او ٹی پی کوڈ', 'او ٽي پي ڪوڊ')}</Label>
                       <div className="relative mt-2">
                         <ShieldCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
@@ -553,7 +553,7 @@ export const LoginPage = ({ onNavigate }) => {
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor="password" className="text-gray-700">{t('New Password', 'نیا پاس ورڈ')}</Label>
+                      <Label htmlFor="password" className="text-gray-700">{t('New Password', 'نیا پاس ورڈ', 'نئون پاسورڊ')}</Label>
                       <div className="relative mt-2">
                         <KeyRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
@@ -567,7 +567,7 @@ export const LoginPage = ({ onNavigate }) => {
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor="confirmPassword" className="text-gray-700">{t('Confirm Password', 'پاس ورڈ کی تصدیق کریں')}</Label>
+                      <Label htmlFor="confirmPassword" className="text-gray-700">{t('Confirm Password', 'پاس ورڈ کی تصدیق کریں', 'پاسورڊ جي تصديق ڪريو')}</Label>
                       <div className="relative mt-2">
                         <KeyRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
@@ -581,7 +581,7 @@ export const LoginPage = ({ onNavigate }) => {
                       </div>
                     </div>
                     <Button type="submit" className="w-full bg-blue-600 py-6 rounded-xl" disabled={isLoading}>
-                      {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Reset Password', 'پاس ورڈ تبدیل کریں')}
+                      {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Reset Password', 'پاس ورڈ تبدیل کریں', 'پاسورڊ تبديل ڪريو')}
                     </Button>
                   </form>
                 </motion.div>
@@ -602,7 +602,7 @@ export const LoginPage = ({ onNavigate }) => {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-4 bg-white text-gray-500">
-                  {t('Or continue with', 'یا جاری رکھیں')}
+                  {t('Or continue with', 'یا جاری رکھیں', 'يا جاري رکو')}
                 </span>
               </div>
             </div>
