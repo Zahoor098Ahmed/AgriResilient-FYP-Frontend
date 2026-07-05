@@ -48,12 +48,13 @@ export const NotFoundPage = ({ onNavigate }) => {
           transition={{ delay: 0.7 }}
         >
           <h2 className="text-gray-800 mb-4">
-            {t('Page Not Found', 'صفحہ نہیں ملا')}
+            {t('Page Not Found', 'صفحہ نہیں ملا', 'صفحو نه ملیو')}
           </h2>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
             {t(
               'Looks like this crop field is empty! Let\'s get you back to the farm.',
-              'لگتا ہے یہ فصل کا کھیت خالی ہے! آئیے آپ کو واپس فارم پر لے چلتے ہیں۔'
+              'لگتا ہے یہ فصل کا کھیت خالی ہے! آئیے آپ کو واپس فارم پر لے چلتے ہیں۔',
+              'لڳي ٿو ته هي فصل جو ٻنيون خالي آهي! اچو توهان کي واپس فارم تي وٺي هلون.'
             )}
           </p>
 
@@ -64,7 +65,7 @@ export const NotFoundPage = ({ onNavigate }) => {
                 className="bg-gradient-to-r from-green-500 to-green-700 text-white px-8 py-6"
               >
                 <Home className="w-5 h-5 mr-2" />
-                {t('Go Home', 'گھر جائیں')}
+                {t('Go Home', 'گھر جائیں', 'گھر وڃو')}
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -73,7 +74,7 @@ export const NotFoundPage = ({ onNavigate }) => {
                 className="bg-white border-2 border-green-500 text-green-700 hover:bg-green-50 px-8 py-6"
               >
                 <Search className="w-5 h-5 mr-2" />
-                {t('Dashboard', 'ڈیش بورڈ')}
+                {t('Dashboard', 'ڈیش بورڈ', 'ڊيش بورڊ')}
               </Button>
             </motion.div>
           </div>

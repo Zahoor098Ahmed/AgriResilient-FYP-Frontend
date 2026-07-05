@@ -1,7 +1,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-urdu: 'Noto Nastaliq Urdu', serif;
+  --font-urdu: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', serif;
+  --font-sindhi: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', serif;
   --font-size: 16px;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
@@ -82,6 +83,15 @@
 .font-urdu {
   font-family: var(--font-urdu) !important;
   line-height: 2 !important;
+}
+
+/* Auto-apply a script-correct font for Sindhi, set via
+   document.documentElement.lang in LanguageContext. The default font stack
+   doesn't cover several Sindhi-only Perso-Arabic letters, so without this,
+   Sindhi text silently renders with missing/blank glyphs. Urdu intentionally
+   keeps the plain default font (no Nastaliq override) per original design. */
+html[lang="sd"] {
+  font-family: var(--font-sindhi);
 }
 
 @theme inline {

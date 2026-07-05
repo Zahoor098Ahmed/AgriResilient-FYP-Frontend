@@ -84,18 +84,19 @@ export const WasteRecycling = ({ onNavigate }) => {
             detected: data.detected,
             confidence: (data.confidence * 100).toFixed(1),
             recyclables: data.recyclables,
+            nearbyCenters: data.nearbyCenters || [],
             recommendations: data.recyclables.map((item, index) => ({
               type: item.itemType || item.type,
-              potential: item.potential || 'High Potential',
-              value: item.value || 'Value Varies',
+              potential: item.potential || t('High Potential', 'زیادہ امکان', 'وڌيڪ امڪان'),
+              value: item.value || t('Value Varies', 'قیمت مختلف ہو سکتی ہے', 'قيمت مختلف ٿي سگهي ٿي'),
               description: item.description,
-              carbon: `+${Math.floor(Math.random() * 20) + 10} credits`,
+              carbon: `+${Math.floor(Math.random() * 20) + 10} ${t('credits', 'کریڈٹس', 'ڪريڊٽس')}`,
               icon: (item.itemType || item.type || '').toLowerCase().includes('compost') || (item.itemType || item.type || '').toLowerCase().includes('fertilizer') ? Leaf : Factory,
               color: index % 2 === 0 ? 'from-green-500 to-green-700' : 'from-blue-500 to-blue-700',
             }))
           });
         } else {
-          setError(data.message || 'Detection failed');
+          setError(data.message || t('Detection failed', 'شناخت ناکام ہوگئی', 'سڃاڻپ ناڪام ٿي وئي'));
         }
       } catch (err) {
         console.error('Upload error:', err);
@@ -107,12 +108,6 @@ export const WasteRecycling = ({ onNavigate }) => {
 
     performScan();
   };
-
-  const recyclers = [
-    { name: t('Eco-Friendly Recyclers', 'ایکو فرینڈلی ری سائیکلرز', 'ايڪو فرينڊلي ري سائيڪلرز'), distance: '5 km', rating: 4.8, verified: true },
-    { name: t('Green Life Solutions', 'گرین لائف سلوشنز', 'گرين لائف سوليوشنز'), distance: '12 km', rating: 4.6, verified: true },
-    { name: t('Recycle Pros', 'ری سائیکل پروز', 'ري سائيڪل پروز'), distance: '18 km', rating: 4.9, verified: true },
-  ];
 
   const handleUploadClick = () => {
     if (!user) {
@@ -290,32 +285,34 @@ export const WasteRecycling = ({ onNavigate }) => {
               ))}
             </div>
 
-            <Card className="p-8 bg-white shadow-xl">
-              <h2 className="text-gray-800 mb-6">{t('Nearby Recyclers', 'قریبی ری سائیکلرز', 'قريبي ري سائيڪلرز')}</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                {recyclers.map((recycler, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="p-4 bg-gray-50 rounded-xl border-2 border-transparent hover:border-green-500 transition-all cursor-pointer"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <Factory className="w-6 h-6 text-green-600" />
+            {scanResult.nearbyCenters && scanResult.nearbyCenters.length > 0 && (
+              <Card className="p-8 bg-white shadow-xl">
+                <h2 className="text-gray-800 mb-6">{t('Nearby Options', 'قریبی مقامات', 'قريبي هنڌ')}</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {scanResult.nearbyCenters.map((center, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      className="p-4 bg-gray-50 rounded-xl border-2 border-transparent hover:border-green-500 transition-all"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <Factory className="w-6 h-6 text-green-600" />
+                        </div>
+                        <Badge variant="outline" className="text-green-600 border-green-200">
+                          {center.type}
+                        </Badge>
                       </div>
-                      <Badge variant="outline" className="text-green-600 border-green-200">
-                        {recycler.distance}
-                      </Badge>
-                    </div>
-                    <h4 className="font-bold text-gray-800 mb-1">{recycler.name}</h4>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <MapPin className="w-4 h-4" />
-                      {t('Verified Center', 'تصدیق شدہ مرکز', 'تصديق ٿيل مرڪز')}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </Card>
+                      <h4 className="font-bold text-gray-800 mb-1">{center.name}</h4>
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <MapPin className="w-4 h-4" />
+                        {t('AI Suggested', 'AI تجویز کردہ', 'AI جي تجويز ڪيل')}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
         )}
       </div>

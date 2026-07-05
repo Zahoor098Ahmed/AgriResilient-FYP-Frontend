@@ -66,10 +66,10 @@ export const WeatherAlerts = ({ onNavigate }) => {
       <div className="min-h-screen flex items-center justify-center bg-red-50">
         <div className="text-center p-8 bg-white rounded-3xl shadow-xl">
           <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('Weather Data Unavailable', 'موسم کا ڈیٹا دستیاب نہیں ہے')}</h2>
-          <p className="text-gray-600 mb-6">{t('Failed to fetch real-time weather. Please try again later.', 'حقیقی وقت کا موسم حاصل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔')}</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('Weather Data Unavailable', 'موسم کا ڈیٹا دستیاب نہیں ہے', 'موسم جو ڊيٽا موجود ناهي')}</h2>
+          <p className="text-gray-600 mb-6">{t('Failed to fetch real-time weather. Please try again later.', 'حقیقی وقت کا موسم حاصل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔', 'حقيقي وقت جو موسم حاصل ڪرڻ ۾ ناڪام. مهرباني ڪري بعد ۾ ٻيهر ڪوشش ڪريو.')}</p>
           <Button onClick={() => window.location.reload()} className="bg-green-600 hover:bg-green-700">
-            {t('Retry', 'دوبارہ کوشش کریں')}
+            {t('Retry', 'دوبارہ کوشش کریں', 'ٻيهر ڪوشش ڪريو')}
           </Button>
         </div>
       </div>
@@ -129,7 +129,7 @@ export const WeatherAlerts = ({ onNavigate }) => {
                 </div>
                 <div className="absolute bottom-6 left-6 right-6 p-4 bg-black/30 backdrop-blur-md rounded-xl border border-white/20 text-white">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold">{userCity} Forecast</span>
+                    <span className="text-lg font-bold">{userCity} {t('Forecast', 'پیشگوئی', 'اڳڪٿي')}</span>
                     <Badge className="bg-green-500 text-white">{t('Live', 'لائیو', 'لائيو')}</Badge>
                   </div>
                 </div>
@@ -214,7 +214,11 @@ export const WeatherAlerts = ({ onNavigate }) => {
                             : 'bg-blue-500 text-white'
                         }
                       >
-                        {alert.severity.toUpperCase()}
+                        {alert.severity === 'high'
+                          ? t('HIGH', 'زیادہ', 'وڌيڪ')
+                          : alert.severity === 'medium'
+                          ? t('MEDIUM', 'درمیانہ', 'وچولو')
+                          : t('LOW', 'کم', 'گھٽ')}
                       </Badge>
                     </div>
                     <p className="text-gray-600 mb-2">{alert.description}</p>

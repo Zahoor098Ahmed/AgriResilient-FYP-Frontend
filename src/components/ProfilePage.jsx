@@ -59,7 +59,7 @@ export const ProfilePage = ({ onNavigate }) => {
         toast.error(result.message);
       }
     } catch (err) {
-      toast.error('Failed to update profile');
+      toast.error(t('Failed to update profile', 'پروفائل اپ ڈیٹ کرنے میں ناکام', 'پروفائل اپڊيٽ ڪرڻ ۾ ناڪام'));
     } finally {
       setIsLoading(false);
     }

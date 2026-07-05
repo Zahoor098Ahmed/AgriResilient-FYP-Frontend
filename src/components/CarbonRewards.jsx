@@ -33,7 +33,7 @@ export const CarbonRewards = ({ onNavigate }) => {
         toast.error(result.message);
       }
     } catch (err) {
-      toast.error('Redemption failed');
+      toast.error(t('Redemption failed', 'ادائیگی ناکام ہوگئی', 'ادائيگي ناڪام ٿي وئي'));
     }
   };
 

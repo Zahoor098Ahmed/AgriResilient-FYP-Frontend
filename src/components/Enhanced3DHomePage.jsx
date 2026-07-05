@@ -165,7 +165,7 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
                 <Zap className="w-4 h-4 mr-2 inline" />
                 {t('Climate-Smart Agriculture for Pakistan', 'پاکستان کے لیے کلائمیٹ سمارٹ زراعت', 'پاڪستان لاءِ ڪلائميٽ سمارٽ زراعت')}
               </motion.div>
-              <h1 className={`${language === 'sd' ? 'text-5xl lg:text-6xl' : 'text-5xl lg:text-6xl'} font-black text-gray-900 leading-tight mb-6`}>
+              <h1 className={`${language === 'ur' ? 'text-4xl lg:text-5xl' : 'text-5xl lg:text-6xl'} font-black text-gray-900 leading-tight mb-6`}>
                 {t('Resilient Farming', 'مستحکم زراعت', 'مستحڪم زراعت')} <br />
                 <span className="text-green-600 italic">{t('Powered by AI', 'AI کے ذریعے', 'AI جي ذريعي')}</span>
               </h1>

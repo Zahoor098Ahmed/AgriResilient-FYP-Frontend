@@ -8,6 +8,13 @@ export const LanguageProvider = ({ children }) => {
     return saved || 'en';
   });
 
+  // Keep <html lang> in sync so CSS can apply script-appropriate fonts
+  // (Urdu and Sindhi both need Perso-Arabic glyph coverage the default
+  // font stack doesn't have, and Sindhi needs letters Urdu fonts lack).
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   const handleLanguageChange = (newLang) => {
     setLanguage(newLang);
     localStorage.setItem('preferredLanguage', newLang);

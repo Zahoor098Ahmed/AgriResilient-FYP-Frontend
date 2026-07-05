@@ -95,7 +95,7 @@ export const ChatBot = () => {
                   </motion.div>
                   <h3 className="font-bold">AgriBot</h3>
                 </div>
-                <p className="text-xs text-green-100">{t('Online | Powered by AI', 'آن لائن | AI کے ذریعے چلنے والا')}</p>
+                <p className="text-xs text-green-100">{t('Online | Powered by AI', 'آن لائن | AI کے ذریعے چلنے والا', 'آن لائين | AI ذريعي هلندڙ')}</p>
               </div>
             </div>
 
@@ -129,7 +129,7 @@ export const ChatBot = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder={t('Type your question...', 'اپنا سوال ٹائپ کریں...')}
+                  placeholder={t('Type your question...', 'اپنا سوال ٹائپ کریں...', 'پنهنجو سوال ٽائيپ ڪريو...')}
                   className="flex-1 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <motion.button

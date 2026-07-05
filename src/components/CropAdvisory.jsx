@@ -109,6 +109,23 @@ export const CropAdvisory = ({ onNavigate }) => {
     { value: 'cotton', label: '🌿 ' + t('Cotton', 'کپاس', 'ڪپهه'), icon: '🌿' },
     { value: 'sugarcane', label: '🎋 ' + t('Sugarcane', 'گنا', 'ڪمند'), icon: '🎋' },
     { value: 'maize', label: '🌽 ' + t('Maize', 'مکئی', 'مڪئي'), icon: '🌽' },
+    { value: 'potato', label: '🥔 ' + t('Potato', 'آلو', 'آلو'), icon: '🥔' },
+    { value: 'onion', label: '🧅 ' + t('Onion', 'پیاز', 'بصر'), icon: '🧅' },
+    { value: 'tomato', label: '🍅 ' + t('Tomato', 'ٹماٹر', 'ٽماٽو'), icon: '🍅' },
+    { value: 'chickpea', label: '🫘 ' + t('Chickpea (Gram)', 'چنا', 'چڻا'), icon: '🫘' },
+    { value: 'lentil', label: '🫘 ' + t('Lentil (Masoor)', 'مسور', 'مسور'), icon: '🫘' },
+    { value: 'mustard', label: '🌼 ' + t('Mustard', 'سرسوں', 'سرسو'), icon: '🌼' },
+    { value: 'barley', label: '🌾 ' + t('Barley', 'جو', 'جَوُن'), icon: '🌾' },
+    { value: 'sunflower', label: '🌻 ' + t('Sunflower', 'سورج مکھی', 'سج مکي'), icon: '🌻' },
+    { value: 'groundnut', label: '🥜 ' + t('Groundnut (Peanut)', 'مونگ پھلی', 'مونگ ڦلي'), icon: '🥜' },
+    { value: 'soybean', label: '🫘 ' + t('Soybean', 'سویابین', 'سويا بين'), icon: '🫘' },
+    { value: 'jute', label: '🌿 ' + t('Jute', 'پٹ سن', 'پٽ سن'), icon: '🌿' },
+    { value: 'tea', label: '🍵 ' + t('Tea', 'چائے', 'چانهه'), icon: '🍵' },
+    { value: 'chili', label: '🌶️ ' + t('Chili', 'مرچ', 'مرچ'), icon: '🌶️' },
+    { value: 'millet', label: '🌾 ' + t('Millet (Bajra)', 'باجرہ', 'باجرو'), icon: '🌾' },
+    { value: 'sorghum', label: '🌾 ' + t('Sorghum (Jowar)', 'جوار', 'جوئر'), icon: '🌾' },
+    { value: 'mango', label: '🥭 ' + t('Mango', 'آم', 'انب'), icon: '🥭' },
+    { value: 'banana', label: '🍌 ' + t('Banana', 'کیلا', 'ڪيلو'), icon: '🍌' },
   ];
 
   return (

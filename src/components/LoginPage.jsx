@@ -42,14 +42,14 @@ export const LoginPage = ({ onNavigate }) => {
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        toast.success(t('Welcome back!', 'خوش آمدید!'));
+        toast.success(t('Welcome back!', 'خوش آمدید!', 'واپسي تي ڀليڪار!'));
         onNavigate('home');
       } else {
         setError(result.message);
         toast.error(result.message);
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(t('An unexpected error occurred. Please try again.', 'ایک غیر متوقع خرابی پیش آگئی۔ براہ کرم دوبارہ کوشش کریں۔', 'هڪ اڻڄاتل غلطي پيش آئي. مهرباني ڪري ٻيهر ڪوشش ڪريو.'));
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +65,7 @@ export const LoginPage = ({ onNavigate }) => {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('Passwords do not match', 'پاس ورڈز مماثل نہیں ہیں', 'پاسورڊ نٿا ملن'));
       return;
     }
 
@@ -75,7 +75,7 @@ export const LoginPage = ({ onNavigate }) => {
     try {
       const result = await signup(formData.name, formData.email, formData.password, formData.gender);
       if (result.success) {
-        toast.success(t('Account created successfully! Please login.', 'اکاؤنٹ کامیابی سے بن گیا! براہ کرم لاگ ان کریں۔'));
+        toast.success(t('Account created successfully! Please login.', 'اکاؤنٹ کامیابی سے بن گیا! براہ کرم لاگ ان کریں۔', 'اڪائونٽ ڪاميابيءَ سان ٺهي ويو! مهرباني ڪري لاگ ان ڪريو.'));
         // Automatically switch to login tab
         const loginTab = document.querySelector('[value="login"]');
         if (loginTab) loginTab.click();
@@ -84,7 +84,7 @@ export const LoginPage = ({ onNavigate }) => {
         toast.error(result.message);
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(t('An unexpected error occurred. Please try again.', 'ایک غیر متوقع خرابی پیش آگئی۔ براہ کرم دوبارہ کوشش کریں۔', 'هڪ اڻڄاتل غلطي پيش آئي. مهرباني ڪري ٻيهر ڪوشش ڪريو.'));
     } finally {
       setIsLoading(false);
     }
@@ -96,13 +96,13 @@ export const LoginPage = ({ onNavigate }) => {
     try {
       const result = await forgotPassword(formData.email);
       if (result.success) {
-        toast.success(t('OTP sent to your email!', 'او ٹی پی آپ کے ای میل پر بھیج دیا گیا ہے!'));
+        toast.success(t('OTP sent to your email!', 'او ٹی پی آپ کے ای میل پر بھیج دیا گیا ہے!', 'OTP توهان جي اي ميل تي موڪلي ڇڏيو ويو آهي!'));
         setView('reset');
       } else {
         setError(result.message);
       }
     } catch (err) {
-      setError('Failed to send OTP');
+      setError(t('Failed to send OTP', 'OTP بھیجنے میں ناکام', 'OTP موڪلڻ ۾ ناڪام'));
     } finally {
       setIsLoading(false);
     }
@@ -111,20 +111,20 @@ export const LoginPage = ({ onNavigate }) => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('Passwords do not match', 'پاس ورڈز مماثل نہیں ہیں', 'پاسورڊ نٿا ملن'));
       return;
     }
     setIsLoading(true);
     try {
       const result = await resetPassword(formData.email, formData.otp, formData.password);
       if (result.success) {
-        toast.success(t('Password reset successful!', 'پاس ورڈ کامیابی سے تبدیل ہو گیا!'));
+        toast.success(t('Password reset successful!', 'پاس ورڈ کامیابی سے تبدیل ہو گیا!', 'پاسورڊ ڪاميابيءَ سان تبديل ٿي ويو!'));
         onNavigate('home');
       } else {
         setError(result.message);
       }
     } catch (err) {
-      setError('Failed to reset password');
+      setError(t('Failed to reset password', 'پاس ورڈ تبدیل کرنے میں ناکام', 'پاسورڊ تبديل ڪرڻ ۾ ناڪام'));
     } finally {
       setIsLoading(false);
     }
@@ -149,18 +149,18 @@ export const LoginPage = ({ onNavigate }) => {
         });
 
         if (result.success) {
-          toast.success(t('Google Login Successful!', 'گوگل لاگ ان کامیاب!'));
+          toast.success(t('Google Login Successful!', 'گوگل لاگ ان کامیاب!', 'گوگل لاگ ان ڪامياب!'));
           onNavigate('home');
         } else {
           toast.error(result.message);
         }
       } catch (err) {
-        toast.error('Google Login failed');
+        toast.error(t('Google Login failed', 'گوگل لاگ ان ناکام ہوگیا', 'گوگل لاگ ان ناڪام ٿي ويو'));
       } finally {
         setIsLoading(false);
       }
     },
-    onError: () => toast.error('Google Login failed')
+    onError: () => toast.error(t('Google Login failed', 'گوگل لاگ ان ناکام ہوگیا', 'گوگل لاگ ان ناڪام ٿي ويو'))
   });
 
   const handleSocialLogin = async (provider) => {
@@ -168,9 +168,9 @@ export const LoginPage = ({ onNavigate }) => {
       googleLogin();
       return;
     }
-    
+
     // For Facebook, we would use useFacebookLogin or similar
-    toast.info(t(`${provider} Login is coming soon with real OAuth!`, `${provider} لاگ ان جلد آرہا ہے!`));
+    toast.info(t(`${provider} Login is coming soon with real OAuth!`, `${provider} لاگ ان جلد آرہا ہے!`, `${provider} لاگ ان جلد اچي رهيو آهي!`));
   };
 
   return (
