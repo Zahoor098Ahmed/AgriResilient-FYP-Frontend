@@ -6,7 +6,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 export const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const { t } = useLanguage();
+  const [isTyping, setIsTyping] = useState(false);
+  const { t, language } = useLanguage();
   const [messages, setMessages] = useState([
     {
       text: t(
@@ -18,26 +19,48 @@ export const ChatBot = () => {
     },
   ]);
 
-  const handleSend = () => {
-    if (message.trim()) {
-      const newUserMessage = { text: message, isUser: true };
-      setMessages(prev => [...prev, newUserMessage]);
-      setMessage('');
-      
-      // Simulate AI response
-      setTimeout(() => {
-        setMessages(prev => [
-          ...prev,
-          {
-            text: t(
-              'Thank you for your question! Our AI is analyzing your query...',
-              'آپ کے سوال کا شکریہ! ہماری AI آپ کے سوال کا تجزیہ کر رہی ہے...',
-              'توهان جي سوال جو شڪريو! اسان جي AI توهان جي سوال جو تجزيو ڪري رهي آهي...'
-            ),
-            isUser: false,
-          },
-        ]);
-      }, 1000);
+  const handleSend = async () => {
+    if (!message.trim() || isTyping) return;
+
+    const newUserMessage = { text: message, isUser: true };
+    const historyForRequest = [...messages, newUserMessage];
+    setMessages(historyForRequest);
+    setMessage('');
+    setIsTyping(true);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: newUserMessage.text,
+          language,
+          history: historyForRequest,
+        }),
+      });
+
+      const data = await response.json();
+
+      setMessages(prev => [
+        ...prev,
+        {
+          text: data.success
+            ? data.reply
+            : t('Sorry, something went wrong. Please try again.', 'معذرت، کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔', 'معاف ڪجو، ڪجهه غلط ٿي ويو. مهرباني ڪري ٻيهر ڪوشش ڪريو.'),
+          isUser: false,
+        },
+      ]);
+    } catch (err) {
+      console.error('Chat error:', err);
+      setMessages(prev => [
+        ...prev,
+        {
+          text: t('Failed to connect to server. Please try again.', 'سرور سے منسلک ہونے میں ناکام۔ دوبارہ کوشش کریں۔', 'سرور سان ڳنڍڻ ۾ ناڪام. ٻيهر ڪوشش ڪريو.'),
+          isUser: false,
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -119,6 +142,19 @@ export const ChatBot = () => {
                   </div>
                 </motion.div>
               ))}
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="max-w-[80%] p-3 rounded-2xl rounded-tl-none text-sm shadow-sm bg-white text-gray-400 flex gap-1">
+                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0 }}>•</motion.span>
+                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}>•</motion.span>
+                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}>•</motion.span>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Input */}
@@ -129,14 +165,16 @@ export const ChatBot = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  disabled={isTyping}
                   placeholder={t('Type your question...', 'اپنا سوال ٹائپ کریں...', 'پنهنجو سوال ٽائيپ ڪريو...')}
-                  className="flex-1 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="flex-1 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-60"
                 />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={handleSend}
-                  className="p-2 bg-green-600 text-white rounded-full shadow-lg"
+                  disabled={isTyping}
+                  className="p-2 bg-green-600 text-white rounded-full shadow-lg disabled:opacity-60"
                 >
                   <Send size={18} />
                 </motion.button>
