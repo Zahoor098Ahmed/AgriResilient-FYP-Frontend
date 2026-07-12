@@ -192,6 +192,54 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Step 1 of email-verified registration: sends an OTP, doesn't create
+  // the account yet.
+  const registerStart = async (name, email, password, gender) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register-start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, gender })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        return { success: true, otpRequired: true };
+      }
+      const errorMsg = data.errors
+        ? data.errors.map(err => err.message).join(', ')
+        : data.message || 'Registration failed';
+      return { success: false, message: errorMsg };
+    } catch (error) {
+      console.error('Register start error:', error);
+      return { success: false, message: 'Server connection error. Please try again later.' };
+    }
+  };
+
+  // Step 2: verifying the OTP is what actually creates the account. No
+  // token is issued — the user still has to log in afterward.
+  const verifyRegisterOtp = async (email, otp) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register-verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        return { success: true };
+      }
+      const errorMsg = data.errors
+        ? data.errors.map(err => err.message).join(', ')
+        : data.message || 'Verification failed';
+      return { success: false, message: errorMsg };
+    } catch (error) {
+      console.error('Register verify error:', error);
+      return { success: false, message: 'Server connection error. Please try again later.' };
+    }
+  };
+
   const socialLogin = async (userData) => {
     try {
       console.log('Attempting social login:', userData);
@@ -294,6 +342,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Deliberately does NOT log the user in on success — after a reset, the
+  // user should land back on the login screen and sign in manually with
+  // their new password, not be silently authenticated.
   const resetPassword = async (email, token, password) => {
     try {
       const response = await fetch(`${API_URL}/api/auth/reset-password`, {
@@ -302,18 +353,6 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, token, password })
       });
       const data = await response.json();
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setToken(data.token);
-        const loggedInUser = data.data.user;
-        setUser(loggedInUser);
-
-        // Apply language preference
-        if (loggedInUser.preferredLanguage) {
-          localStorage.setItem('preferredLanguage', loggedInUser.preferredLanguage);
-          setLanguage(loggedInUser.preferredLanguage);
-        }
-      }
       return data;
     } catch (error) {
       return { success: false, message: error.message };
@@ -321,7 +360,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, adminLogin, verifyAdminOtp, signup, socialLogin, logout, updateProfile, redeemReward, forgotPassword, resetPassword }}>
+    <AuthContext.Provider value={{ user, token, loading, login, adminLogin, verifyAdminOtp, signup, registerStart, verifyRegisterOtp, socialLogin, logout, updateProfile, redeemReward, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

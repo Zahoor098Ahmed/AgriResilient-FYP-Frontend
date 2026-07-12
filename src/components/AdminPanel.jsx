@@ -124,6 +124,31 @@ export const AdminPanel = ({ onNavigate }) => {
     }
   };
 
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm(t(
+      'Delete this user? Their account will be permanently removed and they will need to register again to use the site.',
+      'اس صارف کو حذف کریں؟ ان کا اکاؤنٹ مستقل طور پر ہٹا دیا جائے گا۔',
+      'ھن صارف کي حذف ڪريو؟ سندس اڪائونٽ مستقل طور تي ھٽايو ويندو.'
+    ))) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/users/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 204) {
+        fetchUsers(usersPagination.page);
+        fetchStats();
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
   const handleLogout = () => {
     logout();
     onNavigate('home');
@@ -385,6 +410,7 @@ export const AdminPanel = ({ onNavigate }) => {
                           <th className="px-6 py-4">{t('Email', 'ای میل', 'اى ميل')}</th>
                           <th className="px-6 py-4">{t('Role', 'کردار', 'ڪردار')}</th>
                           <th className="px-6 py-4">{t('Joined', 'شامل ہوا', 'شامل ٿيو')}</th>
+                          <th className="px-6 py-4 text-right">{t('Action', 'عمل', 'عمل')}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -407,6 +433,16 @@ export const AdminPanel = ({ onNavigate }) => {
                             </td>
                             <td className="px-6 py-4 text-gray-500 text-sm">
                               {new Date(u.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {u._id !== user?.id && (
+                                <button
+                                  onClick={() => handleDeleteUser(u._id)}
+                                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))}

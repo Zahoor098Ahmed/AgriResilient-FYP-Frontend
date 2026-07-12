@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Globe, User, LayoutDashboard, Home, Info, Phone, BookOpen, Leaf, Award, Recycle, Cloud, LogIn, LogOut, Shield, Bell, CloudSun } from 'lucide-react';
+import { Menu, X, Globe, User, LayoutDashboard, Home, Info, Phone, BookOpen, Leaf, Award, Recycle, Cloud, LogIn, LogOut, Bell, CloudSun } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
@@ -58,10 +58,6 @@ export const Navigation = ({ currentPage, onNavigate }) => {
     { id: 'about', label: t('About', 'ہمارے بارے میں', 'اسان بابت'), icon: Info },
     { id: 'contact', label: t('Contact', 'رابطہ کریں', 'رابطو'), icon: Phone },
   ];
-
-  if (user?.role === 'admin') {
-    navLinks.push({ id: 'admin', label: t('Admin', 'ایڈمن', 'ايڊمن'), icon: Shield });
-  }
 
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
