@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Sprout, Recycle, Award, Cloud, TrendingUp, Users, Droplets, Sun, Zap, Shield, ArrowRight, Play, Star } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -8,6 +8,21 @@ import { Badge } from './ui/badge';
 
 export const Enhanced3DHomePage = ({ onNavigate }) => {
   const { t, language } = useLanguage();
+  const [apiContent, setApiContent] = useState(null);
+
+  useEffect(() => {
+    const fetchContent = () => {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/home`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) setApiContent(data.data);
+        })
+        .catch((err) => console.error('Home content fetch error:', err));
+    };
+    fetchContent();
+    const interval = setInterval(fetchContent, 8000);
+    return () => clearInterval(interval);
+  }, []);
 
   const features = [
     {
@@ -84,7 +99,9 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
     },
   ];
 
-  const testimonials = [
+  const localize = (field) => field?.[language] || field?.en || '';
+
+  const hardcodedTestimonials = [
     {
       name: t('Ali Akber', 'علی اکبر', 'علي اڪبر'),
       location: t('NawabShah', 'نواب شاہ', 'نواب شاهه'),
@@ -119,6 +136,16 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
       rating: 5,
     },
   ];
+
+  const testimonials = apiContent?.testimonials?.length > 0
+    ? apiContent.testimonials.map((tItem) => ({
+        name: localize(tItem.name),
+        location: localize(tItem.location),
+        text: localize(tItem.text),
+        image: tItem.image,
+        rating: tItem.rating || 5,
+      }))
+    : hardcodedTestimonials;
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] overflow-hidden">

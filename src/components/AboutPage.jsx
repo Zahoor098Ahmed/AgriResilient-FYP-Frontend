@@ -1,24 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Target, Users, Zap } from 'lucide-react';
+import { Target, Users, Zap, Sparkles } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Card } from './ui/card';
 
-export const AboutPage = ({ onNavigate }) => {
-  const { t } = useLanguage();
+const VALUE_ICONS = [Target, Users, Zap, Sparkles];
 
-  const team = [
+export const AboutPage = ({ onNavigate }) => {
+  const { t, language } = useLanguage();
+  const [apiContent, setApiContent] = useState(null);
+
+  useEffect(() => {
+    const fetchContent = () => {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/about`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) setApiContent(data.data);
+        })
+        .catch((err) => console.error('About content fetch error:', err));
+    };
+    fetchContent();
+    const interval = setInterval(fetchContent, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const hardcodedTeam = [
     { name: 'Dr. Ali Hassan', role: t('AI Researcher', 'AI محقق', 'AI محقق'), emoji: '👨‍💻' },
     { name: 'Fatima Khan', role: t('Agricultural Expert', 'زرعی ماہر', 'زرعي ماهر'), emoji: '👩‍🌾' },
     { name: 'Ahmed Raza', role: t('Software Engineer', 'سافٹ ویئر انجینئر', 'سافٽ ويئر انجنيئر'), emoji: '👨‍💼' },
     { name: 'Sara Malik', role: t('UX Designer', 'UX ڈیزائنر', 'UX ڊيزائنر'), emoji: '👩‍🎨' },
   ];
 
-  const values = [
+  const hardcodedValues = [
     { icon: Target, title: t('Mission', 'مشن', 'مشن'), desc: t('Empower farmers with AI technology', 'کسانوں کو AI ٹیکنالوجی سے بااختیار بنانا', 'هارين کي AI ٽيڪنالاجي سان بااختيار بڻائڻ') },
     { icon: Users, title: t('Community', 'کمیونٹی', 'ڪميونٽي'), desc: t('Building sustainable farming networks', 'پائیدار کھیتی کے نیٹ ورک بنانا', 'پائيدار زراعت جا نيٽ ورڪ بڻائڻ') },
     { icon: Zap, title: t('Innovation', 'اختراع', 'جدت'), desc: t('Climate-smart solutions', 'موسمیاتی سمارٹ حل', 'موسمياتي سمارٽ حل') },
   ];
+
+  const localize = (field) => field?.[language] || field?.en || '';
+
+  const intro = apiContent?.intro ? localize(apiContent.intro) : t(
+    'AgriResilient is an AI-powered platform designed to help Pakistani farmers adapt to climate change through smart crop advisory, waste recycling, and carbon rewards.',
+    'AgriResilient ایک AI سے چلنے والا پلیٹ فارم ہے جو پاکستانی کسانوں کو موسمیاتی تبدیلی کے مطابق ڈھالنے میں مدد کرتا ہے۔',
+    'AgriResilient هڪ AI سان هلندڙ پليٽ فارم آهي جيڪو پاڪستاني هارين کي موسمياتي تبديليءَ موجب ڍلڻ ۾ مدد ڪري ٿو.'
+  );
+
+  const values = apiContent?.values?.length > 0
+    ? apiContent.values.map((v, i) => ({
+        icon: VALUE_ICONS[i % VALUE_ICONS.length],
+        title: localize(v.title),
+        desc: localize(v.desc),
+      }))
+    : hardcodedValues;
+
+  const team = apiContent?.team?.length > 0
+    ? apiContent.team.map((m) => ({ name: m.name, role: localize(m.role), emoji: m.emoji, image: m.image }))
+    : hardcodedTeam;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4">
@@ -38,11 +75,7 @@ export const AboutPage = ({ onNavigate }) => {
         >
           <Card className="p-8 bg-white shadow-2xl text-center">
             <p className="text-gray-700 text-lg leading-relaxed">
-              {t(
-                'AgriResilient is an AI-powered platform designed to help Pakistani farmers adapt to climate change through smart crop advisory, waste recycling, and carbon rewards.',
-                'AgriResilient ایک AI سے چلنے والا پلیٹ فارم ہے جو پاکستانی کسانوں کو موسمیاتی تبدیلی کے مطابق ڈھالنے میں مدد کرتا ہے۔',
-                'AgriResilient هڪ AI سان هلندڙ پليٽ فارم آهي جيڪو پاڪستاني هارين کي موسمياتي تبديليءَ موجب ڍلڻ ۾ مدد ڪري ٿو.'
-              )}
+              {intro}
             </p>
           </Card>
         </motion.div>
@@ -83,7 +116,13 @@ export const AboutPage = ({ onNavigate }) => {
               whileHover={{ scale: 1.1, rotateY: 10 }}
             >
               <Card className="p-6 bg-white shadow-xl text-center">
-                <div className="text-6xl mb-4">{member.emoji}</div>
+                {member.image ? (
+                  <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 shadow-lg border-4 border-white ring-2 ring-green-100">
+                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="text-6xl mb-4">{member.emoji}</div>
+                )}
                 <h3 className="text-gray-800">{member.name}</h3>
                 <p className="text-gray-600 text-sm">{member.role}</p>
               </Card>

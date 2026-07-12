@@ -35,16 +35,20 @@ function LoadingScreen() {
 }
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState('home');
+  // /admin is the one real URL entry point — loading it directly opens the
+  // admin panel (still subject to the same login/role checks below). Every
+  // other page stays on state-based navigation with a clean "/" URL.
+  const [currentPage, setCurrentPage] = useState(() =>
+    window.location.pathname === '/admin' ? 'admin' : 'home'
+  );
   const [backendMessage, setBackendMessage] = useState('');
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    // Keep URL clean as we are using state-based navigation
-    if (window.location.pathname !== '/') {
+    if (window.location.pathname !== '/' && window.location.pathname !== '/admin') {
       window.history.replaceState({}, '', '/');
     }
-    
+
     fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/health`)
       .then(res => res.json())
       .then(data => setBackendMessage(`Connected (Worker ${data.worker})`))
@@ -52,10 +56,9 @@ function AppContent() {
   }, []);
 
   const handleNavigate = (page) => {
-    // Keep URL clean as we are using state-based navigation
-    if (window.location.pathname !== '/') {
-      window.history.replaceState({}, '', '/');
-    }
+    // Reflect /admin in the URL when navigating there; every other page
+    // keeps the existing clean "/" URL behavior.
+    window.history.replaceState({}, '', page === 'admin' ? '/admin' : '/');
 
     // Only Dashboard remains strictly protected for viewing
     const strictlyProtected = ['dashboard', 'admin'];
@@ -76,7 +79,7 @@ function AppContent() {
     // Strictly protected routes (Login required to even view)
     const strictlyProtected = ['dashboard', 'admin', 'profile', 'carbon-rewards'];
     if (!user && strictlyProtected.includes(currentPage)) {
-      return <LoginPage onNavigate={handleNavigate} />;
+      return <LoginPage onNavigate={handleNavigate} isAdminLogin={currentPage === 'admin'} />;
     }
 
     switch (currentPage) {
@@ -109,10 +112,23 @@ function AppContent() {
     }
   };
 
+  // Admin gets an isolated shell — no site nav, footer, or chatbot, and no
+  // path back into the regular site while inside the admin panel.
+  if (currentPage === 'admin') {
+    return (
+      <div className="min-h-screen bg-white">
+        <Suspense fallback={<LoadingScreen />}>
+          {renderPage()}
+        </Suspense>
+        <Toaster />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
-      
+
       <div className="pt-20">
         <Suspense fallback={<LoadingScreen />}>
           {renderPage()}

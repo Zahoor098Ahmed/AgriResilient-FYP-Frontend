@@ -1,16 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const Footer = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [apiContent, setApiContent] = useState(null);
+
+  useEffect(() => {
+    const fetchContent = () => {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/footer`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) setApiContent(data.data);
+        })
+        .catch((err) => console.error('Footer content fetch error:', err));
+    };
+    fetchContent();
+    const interval = setInterval(fetchContent, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const localize = (field) => field?.[language] || field?.en || '';
+
+  const aboutBlurb = apiContent?.aboutBlurb ? localize(apiContent.aboutBlurb) : t(
+    'Empowering Pakistani farmers with AI-driven climate solutions for sustainable agriculture.',
+    'پاکستانی کسانوں کو AI سے چلنے والے موسمیاتی حل کے ساتھ بااختیار بنانا',
+    'پاڪستاني هارين کي AI سان هلندڙ موسمياتي حلن سان بااختيار بڻائڻ'
+  );
+  const contactEmail = apiContent?.email || 'info@agriresilient.pk';
+  const contactPhone = apiContent?.phone || '+92 300 1234567';
+  const address = apiContent?.address ? localize(apiContent.address) : t('Islamabad, Pakistan', 'اسلام آباد، پاکستان', 'اسلام آباد، پاڪستان');
 
   const socialIcons = [
-    { Icon: Facebook, href: '#', color: '#1877F2' },
-    { Icon: Twitter, href: '#', color: '#1DA1F2' },
-    { Icon: Instagram, href: '#', color: '#E4405F' },
-    { Icon: Linkedin, href: '#', color: '#0A66C2' },
+    { Icon: Facebook, href: apiContent?.socialLinks?.facebook || '#', color: '#1877F2' },
+    { Icon: Twitter, href: apiContent?.socialLinks?.twitter || '#', color: '#1DA1F2' },
+    { Icon: Instagram, href: apiContent?.socialLinks?.instagram || '#', color: '#E4405F' },
+    { Icon: Linkedin, href: apiContent?.socialLinks?.linkedin || '#', color: '#0A66C2' },
   ];
 
   return (
@@ -61,11 +87,7 @@ export const Footer = () => {
               {t('About AgriResilient', 'AgriResilient کے بارے میں', 'AgriResilient بابت')}
             </h3>
             <p className="text-green-200/80 leading-relaxed">
-              {t(
-                'Empowering Pakistani farmers with AI-driven climate solutions for sustainable agriculture.',
-                'پاکستانی کسانوں کو AI سے چلنے والے موسمیاتی حل کے ساتھ بااختیار بنانا',
-                'پاڪستاني هارين کي AI سان هلندڙ موسمياتي حلن سان بااختيار بڻائڻ'
-              )}
+              {aboutBlurb}
             </p>
           </motion.div>
 
@@ -100,15 +122,15 @@ export const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-green-200/80">
                 <Mail className="w-5 h-5" />
-                <span>info@agriresilient.pk</span>
+                <span>{contactEmail}</span>
               </div>
               <div className="flex items-center gap-3 text-green-200/80">
                 <Phone className="w-5 h-5" />
-                <span>+92 300 1234567</span>
+                <span>{contactPhone}</span>
               </div>
               <div className="flex items-center gap-3 text-green-200/80">
                 <MapPin className="w-5 h-5" />
-                <span>{t('Islamabad, Pakistan', 'اسلام آباد، پاکستان', 'اسلام آباد، پاڪستان')}</span>
+                <span>{address}</span>
               </div>
             </div>
           </div>

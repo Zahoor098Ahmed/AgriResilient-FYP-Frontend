@@ -7,15 +7,38 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
+import { toast } from 'sonner';
 
 export const ContactPage = ({ onNavigate }) => {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
-    setTimeout(() => setIsSubmitting(false), 2000);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(t('Message sent! We\'ll get back to you soon.', 'پیغام بھیج دیا گیا! ہم جلد آپ سے رابطہ کریں گے۔', 'پيغام موڪليو ويو! اسان جلد توهان سان رابطو ڪنداسين.'));
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        toast.error(data.message || t('Failed to send message. Please try again.', 'پیغام بھیجنے میں ناکام۔ دوبارہ کوشش کریں۔', 'پيغام موڪلڻ ۾ ناڪام. ٻيهر ڪوشش ڪريو.'));
+      }
+    } catch (err) {
+      console.error('Contact submit error:', err);
+      toast.error(t('Failed to connect to server. Please try again.', 'سرور سے منسلک ہونے میں ناکام۔ دوبارہ کوشش کریں۔', 'سرور سان ڳنڍڻ ۾ ناڪام. ٻيهر ڪوشش ڪريو.'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -39,15 +62,35 @@ export const ContactPage = ({ onNavigate }) => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label>{t('Name', 'نام', 'نالو')}</Label>
-                  <Input className="mt-2 py-6" placeholder={t('Your name', 'آپ کا نام', 'توهان جو نالو')} required />
+                  <Input
+                    className="mt-2 py-6"
+                    placeholder={t('Your name', 'آپ کا نام', 'توهان جو نالو')}
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
                 </div>
                 <div>
                   <Label>{t('Email', 'ای میل', 'اي ميل')}</Label>
-                  <Input type="email" className="mt-2 py-6" placeholder={t('Your email', 'آپ کا ای میل', 'توهان جي اي ميل')} required />
+                  <Input
+                    type="email"
+                    className="mt-2 py-6"
+                    placeholder={t('Your email', 'آپ کا ای میل', 'توهان جي اي ميل')}
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
                 </div>
                 <div>
                   <Label>{t('Message', 'پیغام', 'پيغام')}</Label>
-                  <Textarea className="mt-2" rows={5} placeholder={t('Your message...', 'آپ کا پیغام...', 'توهان جو پيغام...')} required />
+                  <Textarea
+                    className="mt-2"
+                    rows={5}
+                    placeholder={t('Your message...', 'آپ کا پیغام...', 'توهان جو پيغام...')}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                  />
                 </div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button

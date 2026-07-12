@@ -11,12 +11,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { toast } from 'sonner';
 import { useGoogleLogin } from '@react-oauth/google';
 
-export const LoginPage = ({ onNavigate }) => {
+export const LoginPage = ({ onNavigate, isAdminLogin = false }) => {
   const { t } = useLanguage();
-  const { login, signup, forgotPassword, resetPassword, socialLogin } = useAuth();
+  const { login, adminLogin, verifyAdminOtp, signup, forgotPassword, resetPassword, socialLogin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [view, setView] = useState('auth'); // 'auth', 'forgot', 'reset'
+  const [view, setView] = useState('auth'); // 'auth', 'forgot', 'reset', 'otp'
   const [honeypot, setHoneypot] = useState(''); // Anti-bot honeypot
   
   // Form states
@@ -36,14 +36,55 @@ export const LoginPage = ({ onNavigate }) => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
     setIsLoading(true);
     setError('');
 
     try {
+      if (isAdminLogin) {
+        const result = await adminLogin(formData.email, formData.password);
+        if (result.success) {
+          toast.success(t('Verification code sent to your email', 'تصدیقی کوڈ آپ کے ای میل پر بھیج دیا گیا', 'تصديقي ڪوڊ توهان جي اي ميل تي موڪلي ڇڏيو ويو'));
+          setView('otp');
+        } else {
+          setError(result.message);
+          toast.error(result.message);
+        }
+        return;
+      }
+
       const result = await login(formData.email, formData.password);
       if (result.success) {
         toast.success(t('Welcome back!', 'خوش آمدید!', 'واپسي تي ڀليڪار!'));
         onNavigate('home');
+      } else {
+        setError(result.message);
+        toast.error(result.message);
+      }
+    } catch (err) {
+      setError(t('An unexpected error occurred. Please try again.', 'ایک غیر متوقع خرابی پیش آگئی۔ براہ کرم دوبارہ کوشش کریں۔', 'هڪ اڻڄاتل غلطي پيش آئي. مهرباني ڪري ٻيهر ڪوشش ڪريو.'));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOtpVerify = async (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const result = await verifyAdminOtp(formData.email, formData.otp);
+      if (result.success) {
+        toast.success(t('Verified! Welcome, Admin.', 'تصدیق ہو گئی! خوش آمدید، ایڈمن۔', 'تصديق ٿي وئي! ڀليڪار، ايڊمن.'));
+        // Don't call onNavigate here — currentPage is already 'admin' (that's
+        // why this OTP screen is showing). Calling handleNavigate('admin')
+        // immediately would re-check `!user` against the auth state from
+        // BEFORE verifyAdminOtp's setUser() has propagated through a
+        // re-render, incorrectly bouncing to the public login page. Once
+        // `user` updates, App.jsx's existing render logic shows AdminPanel
+        // on its own — no navigation needed.
       } else {
         setError(result.message);
         toast.error(result.message);
@@ -174,29 +215,39 @@ export const LoginPage = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-50 flex items-center justify-center py-12 px-4">
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-green-400/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 100 - 50, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
-      </div>
+    <div className={isAdminLogin
+      ? "min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-black flex items-center justify-center py-12 px-4"
+      : "min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-50 flex items-center justify-center py-12 px-4"
+    }>
+      {isAdminLogin ? (
+        <div className="absolute inset-0 overflow-hidden opacity-40" style={{
+          backgroundImage: 'linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }} />
+      ) : (
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(30)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-green-400/30 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -100, 0],
+                x: [0, Math.random() * 100 - 50, 0],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 5 + Math.random() * 5,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, scale: 0.8, rotateY: -180 }}
@@ -205,7 +256,10 @@ export const LoginPage = ({ onNavigate }) => {
         className="relative z-10 w-full max-w-md"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <Card className="p-8 bg-white/95 backdrop-blur-md shadow-2xl">
+        <Card className={isAdminLogin
+          ? "p-8 bg-green-950/95 backdrop-blur-md shadow-2xl border border-green-800"
+          : "p-8 bg-white/95 backdrop-blur-md shadow-2xl"
+        }>
           <motion.div
             className="text-center mb-8"
             initial={{ y: -50, opacity: 0 }}
@@ -213,16 +267,34 @@ export const LoginPage = ({ onNavigate }) => {
             transition={{ delay: 0.3 }}
           >
             <motion.div
-              className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"
-              whileHover={{ rotate: 360, scale: 1.2 }}
+              className={isAdminLogin
+                ? "w-20 h-20 bg-gradient-to-br from-green-600 to-green-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl"
+                : "w-20 h-20 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"
+              }
+              whileHover={{ rotate: isAdminLogin ? 0 : 360, scale: 1.1 }}
               transition={{ duration: 0.6 }}
             >
-              <Globe className="w-10 h-10 text-white" />
+              {isAdminLogin ? <ShieldCheck className="w-10 h-10 text-white" /> : <Globe className="w-10 h-10 text-white" />}
             </motion.div>
-            <h2 className="text-gray-800 mb-2">{t('Welcome to AgriResilient', 'AgriResilient میں خوش آمدید', 'AgriResilient ۾ ڀليڪار')}</h2>
-            <p className="text-gray-600">
-              {t('Climate-smart farming solutions', 'موسمیاتی سمارٹ کھیتی کے حل', 'موسمياتي سمارٽ فارمنگ جا حل')}
-            </p>
+            {isAdminLogin ? (
+              <>
+                <h2 className="text-white mb-2 tracking-wide">{t('Admin Portal', 'ایڈمن پورٹل', 'ايڊمن پورٽل')}</h2>
+                <p className="text-green-300/80 text-sm">
+                  {t('Restricted access · Authorized personnel only', 'محدود رسائی · صرف مجاز عملہ', 'محدود رسائي · صرف مجاز عملو')}
+                </p>
+                <div className="flex items-center justify-center gap-2 mt-3 text-xs text-green-400/60">
+                  <Lock className="w-3 h-3" />
+                  <span>{t('This session is monitored and logged', 'یہ سیشن مانیٹر اور لاگ کیا جاتا ہے', 'هي سيشن مانيٽر ۽ لاگ ٿيندو آهي')}</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-gray-800 mb-2">{t('Welcome to AgriResilient', 'AgriResilient میں خوش آمدید', 'AgriResilient ۾ ڀليڪار')}</h2>
+                <p className="text-gray-600">
+                  {t('Climate-smart farming solutions', 'موسمیاتی سمارٹ کھیتی کے حل', 'موسمياتي سمارٽ فارمنگ جا حل')}
+                </p>
+              </>
+            )}
           </motion.div>
 
           {error && (
@@ -236,6 +308,7 @@ export const LoginPage = ({ onNavigate }) => {
             </motion.div>
           )}
 
+          <div className={isAdminLogin ? "bg-white rounded-2xl p-6" : ""}>
           <Tabs defaultValue="login" className="w-full">
             <AnimatePresence mode="wait">
               {view === 'auth' ? (
@@ -245,10 +318,12 @@ export const LoginPage = ({ onNavigate }) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                 >
-                  <TabsList className="grid w-full grid-cols-2 mb-8">
-                    <TabsTrigger value="login">{t('Login', 'لاگ ان', 'لاگ ان')}</TabsTrigger>
-                    <TabsTrigger value="register">{t('Register', 'رجسٹر', 'رجسٽر')}</TabsTrigger>
-                  </TabsList>
+                  {!isAdminLogin && (
+                    <TabsList className="grid w-full grid-cols-2 mb-8">
+                      <TabsTrigger value="login">{t('Login', 'لاگ ان', 'لاگ ان')}</TabsTrigger>
+                      <TabsTrigger value="register">{t('Register', 'رجسٹر', 'رجسٽر')}</TabsTrigger>
+                    </TabsList>
+                  )}
 
                   <TabsContent value="login">
                     <form onSubmit={handleLoginSubmit} className="space-y-6">
@@ -312,7 +387,10 @@ export const LoginPage = ({ onNavigate }) => {
                       >
                         <Button
                           type="submit"
-                          className="w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white py-6 rounded-xl shadow-lg"
+                          className={isAdminLogin
+                            ? "w-full bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white py-6 rounded-xl shadow-lg"
+                            : "w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white py-6 rounded-xl shadow-lg"
+                          }
                           disabled={isLoading}
                         >
                           {isLoading ? (
@@ -322,7 +400,7 @@ export const LoginPage = ({ onNavigate }) => {
                               className="w-6 h-6 border-4 border-white border-t-transparent rounded-full mx-auto"
                             />
                           ) : (
-                            t('Login', 'لاگ ان', 'لاگ ان')
+                            isAdminLogin ? t('Secure Login', 'محفوظ لاگ ان', 'محفوظ لاگ ان') : t('Login', 'لاگ ان', 'لاگ ان')
                           )}
                         </Button>
                       </motion.div>
@@ -521,6 +599,51 @@ export const LoginPage = ({ onNavigate }) => {
                     </button>
                   </form>
                 </motion.div>
+              ) : view === 'otp' ? (
+                <motion.div
+                  key="admin-otp"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="text-center">
+                    <ShieldCheck className="w-10 h-10 text-green-600 mx-auto mb-3" />
+                    <h3 className="text-xl font-bold text-gray-800">{t('Verification Required', 'تصدیق درکار ہے', 'تصديق گهربل آهي')}</h3>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {t('Enter the 6-digit code sent to', 'وہ 6 ہندسوں کا کوڈ درج کریں جو بھیجا گیا', '6 انگن جو ڪوڊ داخل ڪريو جيڪو موڪليو ويو')} <span className="font-medium">{formData.email}</span>
+                    </p>
+                  </div>
+                  <form onSubmit={handleOtpVerify} className="space-y-6">
+                    <div>
+                      <Label htmlFor="otp" className="text-gray-700">{t('Verification Code', 'تصدیقی کوڈ', 'تصديقي ڪوڊ')}</Label>
+                      <div className="relative mt-2">
+                        <ShieldCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Input
+                          id="otp"
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={6}
+                          placeholder="000000"
+                          className="pl-10 py-6 border-2 border-gray-200 rounded-xl tracking-[0.5em] text-center"
+                          value={formData.otp}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white py-6 rounded-xl"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto" /> : t('Verify & Continue', 'تصدیق کریں اور جاری رکھیں', 'تصديق ڪريو ۽ جاري رکو')}
+                    </Button>
+                    <button type="button" onClick={() => { setView('auth'); setFormData({ ...formData, otp: '' }); }} className="w-full flex items-center justify-center gap-2 text-sm text-gray-500">
+                      <ArrowLeft className="w-4 h-4" /> {t('Back to Login', 'لاگ ان پر واپس جائیں', 'لاگ ان تي واپس وڃو')}
+                    </button>
+                  </form>
+                </motion.div>
               ) : (
                 <motion.div
                   key="reset"
@@ -588,8 +711,10 @@ export const LoginPage = ({ onNavigate }) => {
               )}
             </AnimatePresence>
           </Tabs>
+          </div>
 
           {/* Social Login */}
+          {!isAdminLogin && (
           <motion.div
             className="mt-8"
             initial={{ opacity: 0 }}
@@ -646,6 +771,7 @@ export const LoginPage = ({ onNavigate }) => {
               </motion.button>
             </div>
           </motion.div>
+          )}
         </Card>
       </motion.div>
 

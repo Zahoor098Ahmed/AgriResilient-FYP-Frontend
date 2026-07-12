@@ -114,6 +114,58 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Step 1 of admin login: verify credentials, triggers an emailed OTP.
+  // Does not store a token — the session only starts once verifyAdminOtp
+  // succeeds.
+  const adminLogin = async (email, password) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/admin-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        return { success: true, otpRequired: true };
+      }
+      const errorMsg = data.errors
+        ? data.errors.map(err => err.message).join(', ')
+        : data.message || 'Login failed';
+      return { success: false, message: errorMsg };
+    } catch (error) {
+      console.error('Admin login error:', error);
+      return { success: false, message: 'Server connection error. Please try again later.' };
+    }
+  };
+
+  // Step 2 of admin login: verify the emailed OTP and actually establish
+  // the session.
+  const verifyAdminOtp = async (email, otp) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/admin-verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        setToken(data.token);
+        setUser(data.data.user);
+        return { success: true };
+      }
+      const errorMsg = data.errors
+        ? data.errors.map(err => err.message).join(', ')
+        : data.message || 'Verification failed';
+      return { success: false, message: errorMsg };
+    } catch (error) {
+      console.error('Admin OTP verify error:', error);
+      return { success: false, message: 'Server connection error. Please try again later.' };
+    }
+  };
+
   const signup = async (name, email, password, gender) => {
     try {
       console.log('Attempting signup for:', email);
@@ -269,7 +321,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, signup, socialLogin, logout, updateProfile, redeemReward, forgotPassword, resetPassword }}>
+    <AuthContext.Provider value={{ user, token, loading, login, adminLogin, verifyAdminOtp, signup, socialLogin, logout, updateProfile, redeemReward, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );
