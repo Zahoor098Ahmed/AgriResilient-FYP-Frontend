@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Users, Scan, BarChart3, Trash2, ShieldCheck, LogOut, Mail, FileText, Info, PanelBottom, TrendingUp, Sparkles, User as UserIcon, Quote } from 'lucide-react';
+import { Users, Scan, BarChart3, Trash2, ShieldCheck, LogOut, Mail, FileText, Info, PanelBottom, TrendingUp, Sparkles, User as UserIcon, Quote, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Card } from './ui/card';
@@ -48,6 +48,7 @@ export const AdminPanel = ({ onNavigate }) => {
   const [usersLoading, setUsersLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -169,25 +170,45 @@ export const AdminPanel = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-slate-100 flex">
+      {/* Backdrop (mobile only, closes sidebar on tap outside) */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-72 bg-green-950 text-white flex flex-col fixed inset-y-0 left-0 z-20">
+      <aside
+        className={`w-72 bg-green-950 text-white flex flex-col fixed inset-y-0 left-0 z-30 transition-transform duration-200 lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="p-6 border-b border-green-900">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-              <ShieldCheck className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                <ShieldCheck className="w-6 h-6 text-white" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="font-bold text-white leading-tight truncate">AgriResilient</h1>
+                <p className="text-xs text-green-300/70">{t('Admin Console', 'ایڈمن کنسول', 'ايڊمن ڪنسول')}</p>
+              </div>
             </div>
-            <div className="min-w-0">
-              <h1 className="font-bold text-white leading-tight truncate">AgriResilient</h1>
-              <p className="text-xs text-green-300/70">{t('Admin Console', 'ایڈمن کنسول', 'ايڊمن ڪنسول')}</p>
-            </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-1.5 text-green-300/70 hover:text-white lg:hidden flex-shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                 activeTab === item.id
                   ? 'bg-green-500/15 text-green-400 border border-green-500/30'
@@ -221,12 +242,30 @@ export const AdminPanel = ({ onNavigate }) => {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 ml-72 min-w-0">
-        <header className="bg-white border-b border-gray-200 px-8 py-5 flex items-center justify-between sticky top-0 z-10">
-          <h2 className="text-xl font-bold text-gray-800">
-            {navItems.find((n) => n.id === activeTab)?.label}
-          </h2>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full">
+      <div className="flex-1 lg:ml-72 min-w-0">
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-8 py-5 flex items-center justify-between sticky top-0 z-10 gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-lg lg:hidden flex-shrink-0"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            {/* Logo + name — the sidebar already shows this on lg+, but the
+                sidebar is off-canvas below that, so the header carries the
+                brand mark on mobile/tablet instead. */}
+            <div className="flex items-center gap-2 lg:hidden flex-shrink-0">
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-bold text-gray-800 text-sm whitespace-nowrap">AgriResilient</span>
+            </div>
+            <div className="h-6 w-[1px] bg-gray-200 lg:hidden flex-shrink-0" />
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
+              {navItems.find((n) => n.id === activeTab)?.label}
+            </h2>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full flex-shrink-0">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -235,7 +274,7 @@ export const AdminPanel = ({ onNavigate }) => {
           </div>
         </header>
 
-        <main className="p-8">
+        <main className="p-4 sm:p-8">
           {activeTab === 'overview' && (
             statsLoading ? (
               <div className="flex items-center justify-center py-24">

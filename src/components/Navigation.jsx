@@ -71,8 +71,8 @@ export const Navigation = ({ currentPage, onNavigate }) => {
       animate={{ y: 0 }}
       className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100"
     >
-      <div className="max-w-full px-2">
-        <div className="flex justify-start items-center ml-22 h-20 gap-4">
+      <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+        <div className="flex justify-between items-center h-20 gap-2">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <motion.div
@@ -80,23 +80,23 @@ export const Navigation = ({ currentPage, onNavigate }) => {
               onClick={() => onNavigate('home')}
               className="flex items-center gap-2 cursor-pointer"
             >
-              <div className="bg-green-600 p-2 rounded-xl shadow-lg">
-                <Leaf className="w-6 h-6 text-white" />
+              <div className="bg-green-600 p-1.5 lg:p-2 xl:p-2.5 rounded-xl shadow-lg flex-shrink-0">
+                <Leaf className="w-5 h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 text-white" />
               </div>
-              <span className="text-2xl font-black bg-gradient-to-r from-green-700 to-green-900 bg-clip-text text-transparent hidden sm:block">
+              <span className="text-base lg:text-lg xl:text-xl 2xl:text-2xl font-black bg-gradient-to-r from-green-700 to-green-900 bg-clip-text text-transparent whitespace-nowrap">
                 AgriResilient
               </span>
             </motion.div>
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center justify-between flex-1">
-            <div className="flex items-center gap-1">
+          <div className="hidden lg:flex items-center justify-end flex-1 min-w-0 gap-1 xl:gap-3">
+            <div className="flex items-center gap-0.5 xl:gap-1">
               {navLinks.map((link) => (
                 <motion.button
                   key={link.id}
                   onClick={() => onNavigate(link.id)}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative ${
+                  className={`px-1.5 xl:px-3 py-2 rounded-xl text-xs xl:text-sm font-medium transition-all flex items-center gap-1 xl:gap-1.5 relative whitespace-nowrap ${
                     currentPage === link.id
                       ? 'bg-green-600 text-white shadow-lg'
                       : 'text-gray-600 hover:bg-green-50 hover:text-green-700'
@@ -104,8 +104,8 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <link.icon className="w-4 h-4" />
-                  {link.label}
+                  <link.icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="hidden xl:inline">{link.label}</span>
                   {link.id === 'weather' && weatherAlert && (
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -116,18 +116,18 @@ export const Navigation = ({ currentPage, onNavigate }) => {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-[1px] bg-gray-200 mx-2" />
+            <div className="flex items-center gap-1.5 xl:gap-2 flex-shrink-0">
+              <div className="h-6 w-[1px] bg-gray-200 mx-1" />
 
               {/* Profile / Login Button */}
               {user ? (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 xl:gap-4">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     onClick={() => onNavigate('profile')}
-                    className="cursor-pointer relative group"
+                    className="cursor-pointer relative group flex-shrink-0"
                   >
-                    <div className="w-10 h-10 rounded-full border-2 border-green-500 overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-full border-2 border-green-500 overflow-hidden bg-gray-100 flex items-center justify-center">
                       {user.profileImage ? (
                         <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
                       ) : (
@@ -145,7 +145,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                       logout();
                       onNavigate('login');
                     }}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
                   >
                     <LogOut className="w-5 h-5" />
                   </motion.button>
@@ -155,7 +155,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onNavigate('login')}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-xl font-bold shadow-lg hover:bg-green-700 transition-all"
+                  className="flex items-center gap-2 px-4 xl:px-6 py-2.5 bg-green-600 text-white rounded-xl font-bold shadow-lg hover:bg-green-700 transition-all whitespace-nowrap flex-shrink-0"
                 >
                   <LogIn className="w-4 h-4" />
                   {t('Login', 'لاگ ان', 'لاگ ان')}
@@ -165,12 +165,12 @@ export const Navigation = ({ currentPage, onNavigate }) => {
               <div className="h-6 w-[1px] bg-gray-200" />
 
               {/* Language Toggle */}
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200"
                 >
                   <Globe className="w-4 h-4" />
                   <span className="text-xs font-bold uppercase">{language}</span>
@@ -207,7 +207,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
         </div>
 
         {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
+          <div className="lg:hidden flex items-center gap-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
@@ -225,7 +225,7 @@ export const Navigation = ({ currentPage, onNavigate }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+            className="lg:hidden bg-white border-t border-gray-100 overflow-hidden max-h-[calc(100vh-5rem)] overflow-y-auto"
           >
             <div className="px-4 py-6 space-y-2">
               {navLinks.map((link) => (

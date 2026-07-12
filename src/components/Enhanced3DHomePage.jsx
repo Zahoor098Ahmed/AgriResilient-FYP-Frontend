@@ -211,13 +211,15 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
                   {t('Get Started', 'شروع کریں', 'شروع ڪريو')}
                   <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform w-6 h-6" />
                 </Button>
-                <Button
+
+                {/* ____ Play Video in feature ____ */}
+                {/* <Button
                   variant="outline"
                   className="px-10 py-8 border-2 border-green-600 text-green-600 rounded-2xl text-xl font-bold hover:bg-green-50 flex items-center gap-2"
                 >
                   <Play className="mr-2 fill-current w-6 h-6" />
                   {t('Watch Video', 'ویڈیو دیکھیں', 'ويڊيو ڏسو')}
-                </Button>
+                </Button> */}
               </div>
             </motion.div>
 
