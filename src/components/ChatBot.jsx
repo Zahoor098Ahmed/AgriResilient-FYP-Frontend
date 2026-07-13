@@ -99,7 +99,7 @@ export const ChatBot = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="fixed inset-x-4 bottom-20 h-[70vh] max-h-[520px] sm:inset-x-auto sm:right-8 sm:bottom-28 sm:w-96 sm:h-[500px] sm:max-h-none z-50 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            className="fixed left-1/2 -translate-x-1/2 bottom-20 sm:bottom-28 w-[calc(100%-2rem)] max-w-96 h-[70vh] max-h-[520px] sm:h-[500px] sm:max-h-none z-50 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
             style={{
               transformStyle: 'preserve-3d',
               transform: 'perspective(1000px) rotateY(-5deg)',
