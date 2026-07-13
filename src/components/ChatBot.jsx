@@ -68,7 +68,7 @@ export const ChatBot = () => {
     <>
       {/* Floating Button */}
       <motion.button
-        className="fixed bottom-8 right-8 z-50 bg-gradient-to-br from-green-500 to-green-700 text-white p-4 rounded-full shadow-2xl"
+        className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 bg-gradient-to-br from-green-500 to-green-700 text-white p-3 sm:p-4 rounded-full shadow-2xl"
         whileHover={{
           scale: 1.1,
           rotate: 360,
@@ -99,14 +99,14 @@ export const ChatBot = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="fixed bottom-28 right-8 z-50 w-96 h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+            className="fixed inset-x-4 bottom-20 h-[70vh] max-h-[520px] sm:inset-x-auto sm:right-8 sm:bottom-28 sm:w-96 sm:h-[500px] sm:max-h-none z-50 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
             style={{
               transformStyle: 'preserve-3d',
               transform: 'perspective(1000px) rotateY(-5deg)',
             }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-600 via-green-700 to-green-800 text-white p-5 relative overflow-hidden">
+            <div className="shrink-0 bg-gradient-to-r from-green-600 via-green-700 to-green-800 text-white p-4 sm:p-5 relative overflow-hidden">
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-2">
                   <motion.div
@@ -123,7 +123,7 @@ export const ChatBot = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 h-[330px] bg-gray-50 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4">
               {messages.map((msg, index) => (
                 <motion.div
                   key={index}
@@ -158,7 +158,7 @@ export const ChatBot = () => {
             </div>
 
             {/* Input */}
-            <div className="p-4 bg-white border-t">
+            <div className="shrink-0 p-4 bg-white border-t">
               <div className="flex gap-2">
                 <input
                   type="text"
