@@ -31,7 +31,7 @@ export const BlogPage = ({ onNavigate }) => {
       title: t('Climate-Smart Farming in Pakistan', 'پاکستان میں موسمیاتی سمارٹ کھیتی', 'پاڪستان ۾ موسمياتي سمارٽ فارمنگ'),
       excerpt: t('Learn how to adapt your farming practices to climate change', 'موسمیاتی تبدیلی کے لیے اپنی کھیتی کو کیسے ڈھالیں', 'سکو ته ڪيئن پنهنجي فارمنگ جي طريقن کي موسمياتي تبديلي سان مطابقت ڏجي'),
       author: 'Dr. Ali Hassan',
-      date: 'Nov 1, 2025',
+      date: 'Jul 12, 2026',
       image: 'https://images.unsplash.com/photo-1581092335878-2d9ff86ca2bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyZSUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzYyMTExMDEzMHww&ixlib=rb-4.1.0&q=80&w=1080',
       content: t(
         `Pakistan's farmers are on the front line of climate change — shifting monsoon patterns, unpredictable heatwaves, and both floods and droughts within the same year have made traditional planting calendars unreliable.\n\nStart by watching real-time weather alerts (see the Weather page) instead of relying only on the old sowing calendar — a week's difference in sowing date can now mean the difference between a full harvest and a failed one. Switch to drought-tolerant wheat and cotton varieties recommended by your local agriculture extension office where floods or dry spells have become common.\n\nSoil health matters more than ever: composting crop residue (see the Recycling page) instead of burning it keeps moisture in the soil and cuts fertilizer costs. Combined with laser land leveling and drip irrigation where affordable, these changes can offset a large share of climate-driven yield loss.\n\nFinally, diversify — a farm growing two or three crops recovers from a bad season far better than one relying on a single crop.`,
@@ -40,10 +40,10 @@ export const BlogPage = ({ onNavigate }) => {
       ),
     },
     {
-      title: t('Maximizing Wheat Yield in 2025', '2025 میں گندم کی پیداوار کو زیادہ سے زیادہ کرنا', '2025 ۾ ڪڻڪ جي پيداوار کي وڌ کان وڌ ڪرڻ'),
+      title: t('Maximizing Wheat Yield in 2026', '2026 میں گندم کی پیداوار کو زیادہ سے زیادہ کرنا', '2026 ۾ ڪڻڪ جي پيداوار کي وڌ کان وڌ ڪرڻ'),
       excerpt: t('Best practices for wheat cultivation this season', 'اس موسم میں گندم کی کاشت کے بہترین طریقے', 'هن موسم ۾ ڪڻڪ جي پوک جا بهترين طريقا'),
       author: 'Fatima Khan',
-      date: 'Oct 28, 2025',
+      date: 'Jul 12, 2026',
       image: 'https://images.unsplash.com/photo-1664729570424-069f0c0d5ef4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGVhdCUyMGZpZWxkJTIwY3JvcHN8ZW58MXx8fHwxNzYyMTQ5MDYxfDA&ixlib=rb-4.1.0&q=80&w=1080',
       content: t(
         `Wheat remains Pakistan's most important staple, and small changes in technique can add up to a significant yield increase this season.\n\nSow between November 1st and November 20th — the "Kor" (first) irrigation 22-25 days after sowing is the single most critical watering of the whole cycle, so don't delay it. Treat seed with fungicide before drilling, and use around 50kg of seed per acre at a depth of 2-3 inches for even germination.\n\nApply 2 bags of DAP per acre at sowing time, then split your urea across the tillering (around day 45) and booting (around day 85) stages rather than dumping it all at once — this alone can noticeably raise grain weight. Watch soil moisture closely during the grain-filling stage around day 110.\n\nHarvest once grain moisture drops below 12%, typically April-May — harvesting too early or too late both cost you yield. Use the AI Crop Advisory page any time for a schedule tailored to your specific location.`,
@@ -55,7 +55,7 @@ export const BlogPage = ({ onNavigate }) => {
       title: t('Turning Waste into Profit', 'فضلہ کو منافع میں تبدیل کرنا', 'فضول کي فائدي ۾ تبديل ڪرڻ'),
       excerpt: t('How recycling damaged crops can earn you money', 'تباہ شدہ فصلوں کی ری سائیکلنگ سے پیسے کیسے کمائیں', 'تباھ ٿيل فصلن جي ري سائيڪلنگ مان پئسا ڪيئن ڪمائجن'),
       author: 'Ahmed Raza',
-      date: 'Oct 25, 2025',
+      date: 'Jul 12, 2026',
       image: 'https://images.unsplash.com/photo-1752741177226-d4d595d8c517?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWN5Y2xpbmclMjBjb21wb3N0fGVufDF8fHx8MTc2MjE0OTA2MXww&ixlib=rb-4.1.0&q=80&w=1080',
       content: t(
         `Every season, huge amounts of wheat straw, cotton stalks, rice husk, and sugarcane bagasse get burned in the field — not just wasted value, but a major source of air pollution and smog across Punjab and Sindh.\n\nMost crop residue has real resale value: wheat straw and rice husk compost into organic fertilizer worth 500-750 PKR per bag, cotton stalks and bagasse can be sold as animal feed supplement, and larger quantities of bagasse are bought by paper mills. None of this requires new equipment — just collection, basic drying or chopping, and a buyer.\n\nThe fastest way to find out what your specific residue is worth is the Waste Recycling page here in AgriResilient: upload a photo and it identifies the item, gives you a realistic PKR price range, and suggests real nearby mandis, compost plants, or feed buyers based on your profile location.\n\nEven a small farm turning residue into compost instead of burning it saves on fertilizer costs the very next season — the return isn't just cash, it's better soil for years afterward.`,
