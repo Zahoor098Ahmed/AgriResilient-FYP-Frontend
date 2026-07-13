@@ -25,10 +25,9 @@ export const AboutPage = ({ onNavigate }) => {
   }, []);
 
   const hardcodedTeam = [
-    { name: 'Dr. Ali Hassan', role: t('AI Researcher', 'AI محقق', 'AI محقق'), emoji: '👨‍💻' },
-    { name: 'Fatima Khan', role: t('Agricultural Expert', 'زرعی ماہر', 'زرعي ماهر'), emoji: '👩‍🌾' },
-    { name: 'Ahmed Raza', role: t('Software Engineer', 'سافٹ ویئر انجینئر', 'سافٽ ويئر انجنيئر'), emoji: '👨‍💼' },
-    { name: 'Sara Malik', role: t('UX Designer', 'UX ڈیزائنر', 'UX ڊيزائنر'), emoji: '👩‍🎨' },
+    { name: 'Engr. Zahoor Ahmed', role: t('Software Engineer & Developer & Team Leader', 'سافٹ ویئر انجینئر، ڈویلپر اور ٹیم لیڈر', 'سافٽ ويئر انجنيئر، ڊولپر ۽ ٽيم ليڊر'), emoji: '👨‍💻' },
+    { name: 'Engr. Muhammand Yasir', role: t('Software Engineer & Front-End Developer', 'سافٹ ویئر انجینئر، فرنٹ اینڈ ڈویلپر', 'سافٽ ويئر انجنيئر، فرنٽ اينڊ ڊولپر'), emoji: '👨‍💻' },
+    { name: 'Engr. Hasnain Ali', role: t('Software Engineer & UX/UI Designer', 'سافٹ ویئر انجینئر، یو ایکس / یو آئی ڈیزائنر', 'سافٽ ويئر انجنيئر، يو ايڪس / يو آءِ ڊزائنر'), emoji: '👨‍🎨' },
   ];
 
   const hardcodedValues = [
@@ -106,7 +105,7 @@ export const AboutPage = ({ onNavigate }) => {
         </div>
 
         <h2 className="text-gray-800 mb-8 text-center">{t('Our Team', 'ہماری ٹیم', 'اسان جي ٽيم')}</h2>
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {team.map((member, index) => (
             <motion.div
               key={index}
@@ -114,8 +113,9 @@ export const AboutPage = ({ onNavigate }) => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + index * 0.1 }}
               whileHover={{ scale: 1.1, rotateY: 10 }}
+              className="h-full"
             >
-              <Card className="p-6 bg-white shadow-xl text-center">
+              <Card className="p-6 bg-white shadow-xl text-center h-full flex flex-col items-center justify-center">
                 {member.image ? (
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 shadow-lg border-4 border-white ring-2 ring-green-100">
                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
