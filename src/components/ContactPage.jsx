@@ -124,7 +124,7 @@ export const ContactPage = ({ onNavigate }) => {
             {[
               { icon: Mail, title: t('Email', 'ای میل', 'اي ميل'), value: 'info@agriresilient.pk' },
               { icon: Phone, title: t('Phone', 'فون', 'فون'), value: '+92 300 1234567' },
-              { icon: MapPin, title: t('Address', 'پتہ', 'پتو'), value: t('Islamabad, Pakistan', 'اسلام آباد، پاکستان', 'اسلام آباد، پاڪستان') },
+              { icon: MapPin, title: t('Address', 'پتہ', 'پتو'), value: t('Karachi, Pakistan', 'کراچی، پاکستان', 'ڪراچي، پاڪستان') },
             ].map((contact, index) => (
               <motion.div
                 key={index}

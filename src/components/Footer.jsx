@@ -30,7 +30,7 @@ export const Footer = () => {
   );
   const contactEmail = apiContent?.email || 'info@agriresilient.pk';
   const contactPhone = apiContent?.phone || '+92 300 1234567';
-  const address = apiContent?.address ? localize(apiContent.address) : t('Islamabad, Pakistan', 'اسلام آباد، پاکستان', 'اسلام آباد، پاڪستان');
+  const address = apiContent?.address ? localize(apiContent.address) : t('Karachi, Pakistan', 'کراچی، پاکستان', 'ڪراچي، پاڪستان');
 
   const socialIcons = [
     { Icon: Facebook, href: apiContent?.socialLinks?.facebook || '#', color: '#1877F2' },

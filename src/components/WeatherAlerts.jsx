@@ -15,9 +15,9 @@ export const WeatherAlerts = ({ onNavigate }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const userCity = user?.location?.city || 'Punjab, Pakistan';
-  const lat = user?.location?.lat || 30.3753; // Default to Pakistan center
-  const lon = user?.location?.lon || 69.3451;
+  const userCity = user?.location?.city || 'Karachi, Pakistan';
+  const lat = user?.location?.lat || 24.8607; // Default to Karachi
+  const lon = user?.location?.lon || 67.0011;
 
   useEffect(() => {
     const fetchWeather = async () => {
