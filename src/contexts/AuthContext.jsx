@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
     // Events to track activity
     const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
-    
+
     if (token) {
       activityEvents.forEach(event => document.addEventListener(event, resetTimer));
       resetTimer();
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
         if (data.success) {
           const fetchedUser = data.data.user;
           setUser(fetchedUser);
-          
+
           // Sync language from user preferences if available and not already set in session
           if (fetchedUser.preferredLanguage && !localStorage.getItem('preferredLanguage')) {
             setLanguage(fetchedUser.preferredLanguage);
@@ -93,18 +93,18 @@ export const AuthProvider = ({ children }) => {
         setToken(data.token);
         const loggedInUser = data.data.user;
         setUser(loggedInUser);
-        
+
         // Apply user's language preference immediately after login
         if (loggedInUser.preferredLanguage) {
           localStorage.setItem('preferredLanguage', loggedInUser.preferredLanguage);
           setLanguage(loggedInUser.preferredLanguage);
         }
-        
+
         return { success: true };
       } else {
         // Handle validation errors array if it exists
-        const errorMsg = data.errors 
-          ? data.errors.map(err => err.message).join(', ') 
+        const errorMsg = data.errors
+          ? data.errors.map(err => err.message).join(', ')
           : data.message || 'Login failed';
         return { success: false, message: errorMsg };
       }
@@ -181,8 +181,8 @@ export const AuthProvider = ({ children }) => {
         // Don't set token or user here, let them login manually
         return { success: true };
       } else {
-        const errorMsg = data.errors 
-          ? data.errors.map(err => err.message).join(', ') 
+        const errorMsg = data.errors
+          ? data.errors.map(err => err.message).join(', ')
           : data.message || 'Signup failed';
         return { success: false, message: errorMsg };
       }
@@ -274,10 +274,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.setItem('preferredLanguage', 'en'); 
+    localStorage.setItem('preferredLanguage', 'en');
     setToken(null);
     setUser(null);
-    setLanguage('en'); 
+    setLanguage('en');
   };
 
   const updateProfile = async (profileData) => {
