@@ -128,7 +128,7 @@ export const WasteRecycling = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4 overflow-x-hidden">
       <div className="container mx-auto max-w-6xl">
         <motion.h1
           initial={{ y: -50, opacity: 0 }}
@@ -226,12 +226,12 @@ export const WasteRecycling = ({ onNavigate }) => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-white p-6 rounded-2xl shadow-xl border-l-8 border-green-600"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-800">{scanResult.detected}</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="text-3xl font-bold text-gray-800 break-words">{scanResult.detected}</h2>
                   <p className="text-gray-600">{t('Confidence Score:', 'اعتماد کا سکور:', 'اعتماد جو اسڪور:')} {scanResult.confidence}%</p>
                 </div>
-                <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold">
+                <div className="shrink-0 self-start bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold">
                   {t('Detected', 'شناخت شدہ', 'سڃاڻپ ٿيل')}
                 </div>
               </div>
@@ -264,15 +264,15 @@ export const WasteRecycling = ({ onNavigate }) => {
                       <div className="grid grid-cols-2 gap-6 mb-8">
                         <div>
                           <div className="text-gray-500 text-sm">{t('Potential', 'ممکنہ', 'ممڪن')}</div>
-                          <div className="text-2xl font-bold text-gray-800">{rec.potential}</div>
+                          <div className="text-2xl font-bold text-gray-800 break-words">{rec.potential}</div>
                         </div>
                         <div>
                           <div className="text-gray-500 text-sm">{t('Market Value', 'مارکیٹ ویلیو', 'مارڪيٽ ويليو')}</div>
-                          <div className="text-2xl font-bold text-green-600">{rec.value}</div>
+                          <div className="text-2xl font-bold text-green-600 break-words">{rec.value}</div>
                         </div>
                       </div>
                       {rec.description && (
-                        <p className="text-gray-600 mb-6 text-sm italic">
+                        <p className="text-gray-600 mb-6 text-sm italic break-words">
                           {rec.description}
                         </p>
                       )}
