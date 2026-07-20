@@ -74,7 +74,9 @@ export const WasteRecycling = ({ onNavigate }) => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.message || 'Detection failed');
+          const serverError = new Error(errorData.message || 'Detection failed');
+          serverError.isServerMessage = true;
+          throw serverError;
         }
 
         const data = await response.json();
@@ -100,7 +102,11 @@ export const WasteRecycling = ({ onNavigate }) => {
         }
       } catch (err) {
         console.error('Upload error:', err);
-        setError(t('Failed to connect to server. Please try again.', 'سرور سے منسلک ہونے میں ناکام۔ دوبارہ کوشش کریں۔', 'سرور سان ڳنڍڻ ۾ ناڪام. ٻيهر ڪوشش ڪريو.'));
+        if (err.isServerMessage) {
+          setError(err.message);
+        } else {
+          setError(t('Failed to connect to server. Please try again.', 'سرور سے منسلک ہونے میں ناکام۔ دوبارہ کوشش کریں۔', 'سرور سان ڳنڍڻ ۾ ناڪام. ٻيهر ڪوشش ڪريو.'));
+        }
       } finally {
         if (attempt >= 0) setIsScanning(false);
       }
