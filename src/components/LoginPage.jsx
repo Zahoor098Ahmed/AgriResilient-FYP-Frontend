@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Lock, User, Phone, Globe, AlertCircle, ArrowLeft, ShieldCheck, KeyRound, Bot } from 'lucide-react';
+import { Mail, Lock, User, Phone, UserCircle2, AlertCircle, ArrowLeft, ShieldCheck, KeyRound, Bot } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
@@ -402,7 +402,7 @@ export const LoginPage = ({ onNavigate, isAdminLogin = false }) => {
               whileHover={{ rotate: isAdminLogin ? 0 : 360, scale: 1.1 }}
               transition={{ duration: 0.6 }}
             >
-              {isAdminLogin ? <ShieldCheck className="w-10 h-10 text-white" /> : <Globe className="w-10 h-10 text-white" />}
+              {isAdminLogin ? <ShieldCheck className="w-10 h-10 text-white" /> : <UserCircle2 className="w-10 h-10 text-white" />}
             </motion.div>
             {isAdminLogin ? (
               <>

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-export const Footer = () => {
+export const Footer = ({ onNavigate }) => {
   const { t, language } = useLanguage();
   const [apiContent, setApiContent] = useState(null);
 
@@ -76,7 +76,7 @@ export const Footer = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* About Section */}
           <motion.div
             whileHover={{ scale: 1.05, rotateY: 5, z: 30 }}
@@ -91,7 +91,7 @@ export const Footer = () => {
             </p>
           </motion.div>
 
-          {/* Quick Links */}
+          {/* Quick Links
           <motion.div
             whileHover={{ scale: 1.05, rotateY: 5, z: 30 }}
             className="space-y-4"
@@ -108,6 +108,7 @@ export const Footer = () => {
                 <motion.li
                   key={link.id}
                   whileHover={{ x: 10, color: '#86efac' }}
+                  onClick={() => onNavigate?.(link.id)}
                   className="cursor-pointer text-green-200/80"
                 >
                   {link.label}
@@ -115,6 +116,7 @@ export const Footer = () => {
               ))}
             </ul>
           </motion.div>
+          */}
 
           {/* Contact Info */}
           <div className="space-y-4">
