@@ -268,7 +268,7 @@ export const Enhanced3DHomePage = ({ onNavigate }) => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              {t('Our Features', 'ہماری خصوصیات', 'اسان جون خاصيتون')} 🚀
+              {t('Our Features', 'ہماری خصوصیات', 'اسان جون خاصيتون')} 
             </h2>
             <p className="text-xl text-gray-600">
               {t('Everything you need to modernize your farm and fight climate change.', 'اپنے فارم کو جدید بنانے اور موسمیاتی تبدیلی سے لڑنے کے لیے آپ کو درکار ہر چیز۔', 'پنهنجي فارم کي جديد بڻائڻ ۽ موسمياتي تبديلي سان وڙهڻ لاءِ توهان کي گهربل هر شيءِ۔')}
